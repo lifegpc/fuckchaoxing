@@ -25,15 +25,27 @@ function fuck()
                 }
                 if(!f)
                 {
-                    fuck();
+                    setTimeout(function(){fuck();},3000);
                 }
                 else
                 {
                     setTimeout(function(){cz(vf);},1000);
                 }
             }
-            if(first)(function(vf){setTimeout(function(){cz(vf)},1000);})(vf);
-            var vfd=vf.contentDocument;
+            if(first==1)(function(vf){setTimeout(function(){cz(vf)},1000);})(vf);
+            /**@type {Document}*/
+            var vfd=null;
+            function getfuckvfd()
+            {
+                var temp=vf.contentDocument;
+                if(temp!=null)
+                {
+                    vfd=vf.contentDocument;
+                    getfuckiframe(vfd);
+                }
+                else setTimeout(getfuckvfd,1000);
+            }
+            getfuckvfd();
             /**@type {HTMLCollectionOf<HTMLIFrameElement>} */
             var vff=null;
             /**@param {Document} vfd*/
@@ -48,7 +60,6 @@ function fuck()
                 }
                 else (function(vfd){setTimeout(function(){getfuckiframe(vfd)},1000)})(vfd);
             }
-            getfuckiframe(vfd);
             /**@param {HTMLIFrameElement} vfi*/
             function fuckvideo(vfi)
             {
@@ -85,6 +96,7 @@ function fuck()
                 /**对视频元素进行处理 */
                 function thendo()
                 {
+                    if(v.hasAttribute('fucked'))return;
                     var p=v.parentElement.parentElement;
                     for(var i=0;i<p.childElementCount;i++)
                     {
@@ -322,6 +334,7 @@ function fuck()
             function then()
             {for(var i=0;i<vff.length;i++)
             {
+                czz(i,vff[i]);
                 for(var j=0;j<vff[i].classList.length;j++)
                 {
                     if(vff[i].classList[j]=='ans-insertvideo-online')
@@ -331,6 +344,45 @@ function fuck()
                     }
                 }
             }}
+            function czz(i,vfi)
+            {
+                if(i)return;
+                /**@param {HTMLIFrameElement} vf
+                 * @param {HTMLIFrameElement} vfi
+                */
+                function cz2(vfi,vf)
+                {
+                    function check()
+                    {
+                        var temp=document.getElementsByTagName('iframe');
+                        var f=false;
+                        for(var i=0;i<temp.length;i++)
+                        {
+                            if(vf==temp[i])f=true;
+                        }
+                        return f;
+                    }
+                    if(check())
+                    {
+                        var vfd=vf.contentDocument;
+                        var temp2=vfd.getElementsByTagName('iframe');
+                        var f2=false;
+                        for(var i=0;i<temp2.length;i++)
+                        {
+                            if(vfi==temp2[i])f2=true;
+                        }
+                        if(!f2)
+                        {
+                            setTimeout(function(){if(check())fuck();},3000);
+                        }
+                        else
+                        {
+                            setTimeout(function(){cz2(vfi,vf)},1000);
+                        }
+                    }
+                }
+                if(!i)(function(vf,vfi){setTimeout(function(){cz2(vfi,vf)},1000)})(vf,vfi);
+            }
         }
         for(var i=0;i<vf.length;i++)
         {
