@@ -213,6 +213,44 @@ function fuck()
                         }
                         xxtcontrolbutton.addEventListener('click',function(e){showhidexxtcontrol(e.srcElement)});
                         div2.append(xxtcontrolbutton);
+                        var zmsettingsbutton=vd.createElement('button');
+                        var zmsettingsmbc=vd.getElementsByClassName('vjs-modal-dialog vjs-hidden  vjs-text-track-settings');
+                        if(zmsettingsmbc.length)
+                        {
+                            zmsettingsbutton.innerText='显示字幕控制面板';
+                            zmsettingsbutton.setAttribute('i',0);
+                            /**@type {HTMLDivElement}*/
+                            var zmsettingsmb=zmsettingsmbc[0];
+                            /**@param {HTMLDivElement} div
+                             * @param {HTMLButtonElement} src
+                            */
+                            function showhidezmsettings(div,src)
+                            {
+                                var i=src.getAttribute('i')-1+1;
+                                function seta(value)
+                                {
+                                    src.setAttribute('i',value);
+                                }
+                                if(i)
+                                {
+                                    div.style.display="none";
+                                    src.innerText="显示字幕控制面板";
+                                    seta(0);
+                                }
+                                else
+                                {
+                                    div.style.display="block";
+                                    src.innerText="隐藏字幕控制面板";
+                                    seta(1);
+                                }
+                            }
+                            (function(div){zmsettingsbutton.addEventListener('click',function(e){showhidezmsettings(div,e.srcElement)})})(zmsettingsmb);
+                            zmsettingsmb.className="'vjs-modal-dialog vjs-text-track-settings";
+                            zmsettingsmb.style.display="none";
+                            zmsettingsmb.style.position="relative";
+                            zmsettingsmb.style.background="#000000AA";
+                            div2.append(zmsettingsbutton);
+                        }
                         div2.append(vd.createElement('br'));
                         var autoplaybutton=vd.createElement('button');
                         autoplaybutton.innerText="视频暂停后自动继续播放";
@@ -246,6 +284,92 @@ function fuck()
                         }
                         autoplaybutton.addEventListener('click',function(e){autoplay(v,e.srcElement)});
                         div2.append(autoplaybutton);
+                        var popquestionc1=vd.getElementsByClassName('x-container ans-timelineobjects x-container-default');
+                        var popquestionc2=vd.getElementsByClassName('x-component ans-timelineobjectsbg x-component-default');
+                        if(popquestionc1.length&&popquestionc2.length)
+                        {
+                            var popquestionbutton1=vd.createElement('button');
+                            popquestionbutton1.innerText="隐藏问题窗口";
+                            popquestionbutton1.setAttribute('i',0);
+                            /**@type {HTMLDivElement}*/
+                            var popquestion1=popquestionc1[0];
+                            /**@type {HTMLDivElement}*/
+                            var popquestion2=popquestionc2[0];
+                            /**@param {HTMLDivElement} div1
+                             * @param {HTMLDivElement} div2
+                             * @param {HTMLButtonElement} src
+                            */
+                            function showhidepopquestion(div1,div2,src)
+                            {
+                                var i=src.getAttribute('i')-1+1;
+                                function seta(value)
+                                {
+                                    src.setAttribute('i',value);
+                                }
+                                if(i)
+                                {
+                                    div1.style.display=null;
+                                    div2.style.display=null;
+                                    src.innerText="隐藏问题窗口";
+                                    seta(0);
+                                }
+                                else
+                                {
+                                    div1.style.display="none";
+                                    div2.style.display="none";
+                                    src.innerText="显示问题窗口";
+                                    seta(1);
+                                }
+                            }
+                            (function(div1,div2){popquestionbutton1.addEventListener('click',function(e){showhidepopquestion(div1,div2,e.srcElement)})})(popquestion1,popquestion2);
+                            div2.append(popquestionbutton1);
+                            var popquestiondiv=vd.createElement('div');
+                            var popquestionbutton2=vd.createElement('button');
+                            popquestiondiv.className="id";
+                            popquestionbutton2.className="id";
+                            popquestionbutton2.innerText="勾选问题答案";
+                            var popquestiondivo=vd.createElement('div');
+                            popquestiondivo.className="id";
+                            popquestiondiv.append(popquestionbutton2);
+                            popquestiondiv.append(popquestiondivo);
+                            /**@param {HTMLDivElement} divo*/
+                            function showanswer(divo)
+                            {
+                                try
+                                {
+                                    var opts=vd.getElementsByClassName('ans-videoquiz-opt');
+                                    if(opts.length>0)
+                                    {
+                                        var f=false;
+                                        for(var i=0;i<opts.length;i++)
+                                        {
+                                            /**@type {HTMLInputElement}*/
+                                            var opt=opts[i].children[0].children[0];
+                                            if(opt.value=="true")
+                                            {
+                                                opt.checked=true;
+                                                f=true;
+                                            }
+                                        }
+                                        if(!f)
+                                        {
+                                            divo.innerText="未找到正确选项";
+                                        }
+                                        else
+                                        {
+                                            divo.innerText="已勾选正确选项";
+                                        }
+                                    }
+                                    else divo.innerText="未找到选项";
+                                }
+                                catch(e)
+                                {
+                                    divo.innerText="发送错误："+e.message;
+                                }
+                            }
+                            (function(divo){popquestionbutton2.addEventListener('click',function(){showanswer(divo)})})(popquestiondivo);
+                            div2.append(popquestiondiv);
+                        }
                         div2.append(vd.createElement('br'));
                         var pbspeeddiv=vd.createElement('div');
                         pbspeeddiv.className="id";
