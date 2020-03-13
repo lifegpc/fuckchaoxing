@@ -98,6 +98,7 @@ function fuck()
                 {
                     if(v.hasAttribute('fucked'))return;
                     var p=v.parentElement.parentElement;
+                    var h=vfi.clientHeight;
                     for(var i=0;i<p.childElementCount;i++)
                     {
                         if(v.parentElement==p.children[i])break;
@@ -139,16 +140,16 @@ function fuck()
                             {
                                 src.innerText="隐藏插件控制面板";
                                 div2.style.display='block';
-                                if(i2==0)showhidedm(vfi,div3,1);
-                                vfi.style.height="642px";
+                                if(i2==0)showhidedm(vfi,div3,src,1);
+                                vfi.style.height=h+100+"px";
                                 seta(1);
                             }
                             else
                             {
                                 src.innerText='展开插件控制面板';
                                 div2.style.display='none';
-                                vfi.style.height="602px";
-                                if(i2==0)showhidedm(vfi,div3,2);
+                                vfi.style.height=h+20+"px";
+                                if(i2==0)showhidedm(vfi,div3,src,2);
                                 seta(0);
                             }
                         }
@@ -387,6 +388,11 @@ function fuck()
                         pbspeedbutton.className="id";
                         pbspeedbutton.innerText="调整播放速度";
                         pbspeeddiv.append(pbspeedbutton);
+                        var pbspeedlockbutton=vd.createElement('button');
+                        pbspeedlockbutton.className="id";
+                        pbspeedlockbutton.innerText="锁定播放速度";
+                        pbspeedlockbutton.setAttribute('i',0);
+                        pbspeeddiv.append(pbspeedlockbutton);
                         var pbspeedout=vd.createElement('div');
                         pbspeedout.className="id";
                         pbspeeddiv.append(pbspeedout);
@@ -408,6 +414,33 @@ function fuck()
                             }
                         }
                         pbspeedbutton.addEventListener('click',function(){setplaybackrate(v,pbspeedinput,pbspeedout);});
+                        function getratechange(){pbspeedinput.value=v.playbackRate;}
+                        function lockratechange(){try{v.playbackRate=pbspeedinput.value-1+1;}catch(e){}}
+                        v.addEventListener('ratechange',getratechange);
+                        /**@param {HTMLButtonElement} src*/
+                        function lockrate(src)
+                        {
+                            var i=src.getAttribute('i')-1+1;
+                            function seta(value)
+                            {
+                                src.setAttribute('i',value);
+                            }
+                            if(i)
+                            {
+                                src.innerText="锁定播放速度";
+                                v.removeEventListener('ratechange',lockratechange);
+                                v.addEventListener('ratechange',getratechange);
+                                seta(0);
+                            }
+                            else
+                            {
+                                src.innerText="取消锁定播放速度";
+                                v.removeEventListener('ratechange',getratechange);
+                                v.addEventListener('ratechange',lockratechange);
+                                seta(1);
+                            }
+                        }
+                        pbspeedlockbutton.addEventListener('click',function(e){lockrate(e.srcElement)});
                         var div3=vd.createElement('div');
                         div3.innerText="隐藏弹幕行";
                         div3.className="id";
@@ -416,10 +449,14 @@ function fuck()
                         d.append(div3);
                         /**@param {HTMLIFrameElement} vfi
                          * @param {HTMLDivElement} src
+                         * @param {HTMLDivElement} div
+                         * @param {number} b
                         */
-                        function showhidedm(vfi,src,b=0)
+                        function showhidedm(vfi,src,div,b=0)
                         {
                             var i=src.getAttribute('i')-1+1;
+                            var i2=div.getAttribute('i')-1+1;
+                            if(!b&&i2)return;
                             var dm=vd.getElementsByClassName('rage_bd');
                             if(dm.length>0)
                             {
@@ -432,19 +469,19 @@ function fuck()
                                 {
                                     dm.style.display="none";
                                     src.innerText="显示弹幕行";
-                                    vfi.style.height="562px";
+                                    vfi.style.height=h+20+"px";
                                     if(!b)seta(1);
                                 }
                                 else
                                 {
                                     dm.style.display=null;
                                     src.innerText="隐藏弹幕行";
-                                    vfi.style.height="602px";
+                                    vfi.style.height=h+60+"px";
                                     if(!b)seta(0);
                                 }
                             }
                         }
-                        div3.addEventListener('click',function(e){showhidedm(vfi,e.srcElement)});
+                        div3.addEventListener('click',function(e){showhidedm(vfi,e.srcElement,div)});
                         div.addEventListener('click',function(e){openhideconsole(vfi,e.srcElement,div2,div3)});
                         var nnode=null;
                         if(i!=p.childElementCount)nnode=p.children[i];
@@ -452,7 +489,7 @@ function fuck()
                         p.insertBefore(div2,nnode);
                     }
                     getdiv();
-                    vfi.style.height="602px";
+                    vfi.style.height=h+60+"px";
                 }
             }
             /**@param {HTMLIFrameElement} vfi*/
@@ -662,6 +699,38 @@ function fuck()
                             }
                         }
                         pbrd.append(pbrb);
+                        function getratechange(){pbri.value=a.playbackRate;}
+                        function lockratechange(){try{a.playbackRate=pbri.value-1+1;}catch(e){}}
+                        a.addEventListener('ratechange',getratechange);
+                        var pbrb2=vd.createElement('button');
+                        pbrb2.className="id";
+                        pbrb2.innerText="锁定播放速度";
+                        pbrb2.setAttribute('i',0);
+                        /**@param {HTMLButtonElement} src*/
+                        function lockrate(src)
+                        {
+                            var i=src.getAttribute('i')-1+1;
+                            function seta(value)
+                            {
+                                src.setAttribute('i',value);
+                            }
+                            if(i)
+                            {
+                                src.innerText="锁定播放速度";
+                                a.removeEventListener('ratechange',lockratechange);
+                                a.addEventListener('ratechange',getratechange);
+                                seta(0);
+                            }
+                            else
+                            {
+                                src.innerText="取消锁定播放速度";
+                                a.removeEventListener('ratechange',getratechange);
+                                a.addEventListener('ratechange',lockratechange);
+                                seta(1);
+                            }
+                        }
+                        pbrb2.addEventListener('click',function(e){lockrate(e.srcElement)});
+                        pbrd.append(pbrb2);
                         var pbro=vd.createElement('div');
                         pbro.className="id";
                         pbrd.append(pbro);
