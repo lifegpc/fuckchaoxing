@@ -455,6 +455,227 @@ function fuck()
                     vfi.style.height="602px";
                 }
             }
+            /**@param {HTMLIFrameElement} vfi*/
+            function fuckaudio(vfi)
+            {
+                var vd=vfi.contentDocument;
+                /**@type {HTMLAudioElement}*/
+                var a=null;
+                function getvd()
+                {
+                    var vd2=vfi.contentDocument;
+                    if(vd2!=null)
+                    {
+                        vd=vd2;
+                        console.log(vd);
+                        getfuckaudio();
+                    }
+                    else
+                    {
+                        setTimeout(getvd,1000);
+                    }
+                }
+                function getfuckaudio()
+                {
+                    var a2=vd.getElementById('audio_html5_api');
+                    if(a2!=null)
+                    {
+                        a=a2;
+                        console.log(a);
+                        thendo();
+                    }
+                    else
+                    {
+                        setTimeout(getfuckaudio,1000);
+                    }
+                }
+                getvd();
+                /**对音频元素进行处理*/
+                function thendo()
+                {
+                    if(a.hasAttribute('fucked'))return;
+                    var p=a.parentElement.parentElement;
+                    var h=vfi.clientHeight;
+                    for(var i=0;i<p.childElementCount;i++)
+                    {
+                        if(a.parentElement==p.children[i])break;
+                    }
+                    i++;
+                    a.setAttribute('fucked',1);
+                    function getdiv()
+                    {
+                        var div=vd.createElement('div');
+                        var st=vd.createElement('style');
+                        st.innerText=".id{display:inline-block;}.id2{font-size:12px;color:red;}";
+                        div.className="id2";
+                        var div2=vd.createElement('div');
+                        div2.innerText="显示音频控制台";
+                        div2.setAttribute('i',0);
+                        /**@param {HTMLDivElement} src
+                         * @param {HTMLDivElement} d2
+                        */
+                        function shwohideacontrol(src,d2)
+                        {
+                            var i=src.getAttribute('i')-1+1;
+                            function seta(value)
+                            {
+                                src.setAttribute('i',value);
+                            }
+                            if(i)
+                            {
+                                src.innerText="显示音频控制台";
+                                d2.style.display="none";
+                                vfi.style.setProperty('height',h+20+"px","important");
+                                seta(0);
+                            }
+                            else
+                            {
+                                src.innerText="隐藏音频控制台";
+                                d2.style.display=null;
+                                vfi.style.setProperty('height',h+110+"px","important");
+                                seta(1);
+                            }
+                        }
+                        div.append(div2);
+                        var d2=vd.createElement('div');
+                        d2.className="id2";
+                        d2.style.display="none";
+                        (function(d2){div2.addEventListener('click',function(e){shwohideacontrol(e.srcElement,d2)})})(d2);
+                        var bscontrolbutton=vd.createElement('button');
+                        bscontrolbutton.innerText="显示浏览器控制条";
+                        bscontrolbutton.setAttribute('i',0);
+                        /**@param {HTMLButtonElement} src*/
+                        function showhideacontrols(src)
+                        {
+                            var i=src.getAttribute('i')-1+1;
+                            function seta(value)
+                            {
+                                src.setAttribute('i',value);
+                            }
+                            if(i)
+                            {
+                                src.innerText="显示浏览器控制条";
+                                a.controls=false;
+                                seta(0);
+                            }
+                            else
+                            {
+                                src.innerText="隐藏浏览器控制条";
+                                a.controls=true;
+                                seta(1);
+                            }
+                        }
+                        bscontrolbutton.addEventListener('click',function(e){showhideacontrols(e.srcElement)});
+                        d2.append(bscontrolbutton);
+                        var xxtcontrolbutton=vd.createElement('button');
+                        xxtcontrolbutton.innerText="隐藏学习通视频控制条";
+                        xxtcontrolbutton.setAttribute('i',1);
+                        /**@param {HTMLButtonElement} src*/
+                        function shwohidexxtacontrol(src)
+                        {
+                            var i=src.getAttribute('i')-1+1;
+                            function seta(value)
+                            {
+                                src.setAttribute('i',value);
+                            }
+                            var coc=vd.getElementsByClassName('vjs-control-bar');
+                            if(coc.length)
+                            {
+                                /**@type {HTMLDivElement}*/
+                                var co=coc[0];
+                                if(i)
+                                {
+                                    co.style.setProperty('display','none','important');
+                                    src.innerText="显示学习通视频控制条";
+                                    seta(0);
+                                }
+                                else
+                                {
+                                    co.style.display=null;
+                                    src.innerText="隐藏学习通视频控制条";
+                                    seta(1);
+                                }
+                            }
+                        }
+                        xxtcontrolbutton.addEventListener('click',function(e){shwohidexxtacontrol(e.srcElement)});
+                        d2.append(xxtcontrolbutton);
+                        d2.append(vd.createElement('br'));
+                        var autoplaybutton=vd.createElement('button');
+                        autoplaybutton.innerText="音频暂停后继续播放";
+                        autoplaybutton.setAttribute('i',0);
+                        /**@param {HTMLButtonElement} src*/
+                        function autoplay(src)
+                        {
+                            var i=src.getAttribute('i')-1+1;
+                            function seta(value)
+                            {
+                                src.setAttribute('i',value);
+                            }
+                            if(i)
+                            {
+                                src.innerText="音频暂停后继续播放";
+                                a.removeEventListener('pause',autoplay2);
+                                seta(0);
+                            }
+                            else
+                            {
+                                src.innerText="关闭音频暂停后继续播放";
+                                a.addEventListener('pause',autoplay2);
+                                seta(1);
+                            }
+                        }
+                        function autoplay2()
+                        {
+                            if(a.currentTime!=a.duration)a.play();
+                        }
+                        autoplaybutton.addEventListener('click',function(e){autoplay(e.srcElement)});
+                        d2.append(autoplaybutton);
+                        d2.append(vd.createElement('br'));
+                        var pbrd=vd.createElement('div');
+                        pbrd.className="id";
+                        var pbrl=vd.createElement('div');
+                        pbrl.innerText="播放速度调整：";
+                        pbrl.className="id";
+                        pbrd.append(pbrl);
+                        var pbri=vd.createElement('input');
+                        pbri.className="id";
+                        pbri.value=a.playbackRate;
+                        pbri.style.width="40px";
+                        pbrd.append(pbri);
+                        var pbrb=vd.createElement('button');
+                        pbrb.className="id";
+                        pbrb.innerText="调整播放速度";
+                        /**@param {HTMLInputElement} inp
+                         * @param {HTMLDivElement} out
+                        */
+                        function pbr(inp,out)
+                        {
+                            try
+                            {
+                                var speed=inp.value-1+1;
+                                a.playbackRate=speed;
+                                out.innerText="速度已调整为"+speed;
+                            }
+                            catch(e)
+                            {
+                                out.innerText="发生错误："+e.message;
+                            }
+                        }
+                        pbrd.append(pbrb);
+                        var pbro=vd.createElement('div');
+                        pbro.className="id";
+                        pbrd.append(pbro);
+                        pbrb.addEventListener('click',function(){pbr(pbri,pbro)});
+                        d2.append(pbrd);
+                        return [st,div,d2];
+                    }
+                    var r=getdiv();
+                    var nnode=null;
+                    if(i!=p.childElementCount)nnode=p.children[i];
+                    for(var j=0;j<r.length;j++)p.insertBefore(r[j],nnode);
+                    vfi.style.setProperty("height",h+20+"px","important");
+                }
+            }
             function then()
             {for(var i=0;i<vff.length;i++)
             {
@@ -464,6 +685,11 @@ function fuck()
                     if(vff[i].classList[j]=='ans-insertvideo-online')
                     {
                         (function(vfi){fuckvideo(vfi);})(vff[i]);
+                        break;
+                    }
+                    else if(vff[i].classList[j]=='ans-insertaudio')
+                    {
+                        (function(vfi){fuckaudio(vfi);})(vff[i]);
                         break;
                     }
                 }
