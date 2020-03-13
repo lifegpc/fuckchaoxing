@@ -283,6 +283,7 @@ function fuck()
                         {
                             if(v.duration!=v.currentTime)v.play();
                         }
+                        if(settings!=null&&settings.vpautoplay)autoplay(v,autoplaybutton);
                         autoplaybutton.addEventListener('click',function(e){autoplay(v,e.srcElement)});
                         div2.append(autoplaybutton);
                         var popquestionc1=vd.getElementsByClassName('x-container ans-timelineobjects x-container-default');
@@ -481,6 +482,9 @@ function fuck()
                                 }
                             }
                         }
+                        vfi.style.height=h+60+"px";
+                        if(settings!=null&&settings.hidedm)showhidedm(vfi,div3,div);
+                        if(settings!=null&&settings.showvc)openhideconsole(vfi,div,div2,div3);
                         div3.addEventListener('click',function(e){showhidedm(vfi,e.srcElement,div)});
                         div.addEventListener('click',function(e){openhideconsole(vfi,e.srcElement,div2,div3)});
                         var nnode=null;
@@ -489,7 +493,6 @@ function fuck()
                         p.insertBefore(div2,nnode);
                     }
                     getdiv();
-                    vfi.style.height=h+60+"px";
                 }
             }
             /**@param {HTMLIFrameElement} vfi*/
@@ -665,6 +668,7 @@ function fuck()
                         {
                             if(a.currentTime!=a.duration)a.play();
                         }
+                        if(settings!=null&&settings.apautoplay)autoplay(autoplaybutton);
                         autoplaybutton.addEventListener('click',function(e){autoplay(e.srcElement)});
                         d2.append(autoplaybutton);
                         d2.append(vd.createElement('br'));
@@ -736,13 +740,14 @@ function fuck()
                         pbrd.append(pbro);
                         pbrb.addEventListener('click',function(){pbr(pbri,pbro)});
                         d2.append(pbrd);
+                        vfi.style.setProperty("height",h+20+"px","important");
+                        if(settings!=null&&settings.showac)shwohideacontrol(div2,d2);
                         return [st,div,d2];
                     }
                     var r=getdiv();
                     var nnode=null;
                     if(i!=p.childElementCount)nnode=p.children[i];
                     for(var j=0;j<r.length;j++)p.insertBefore(r[j],nnode);
-                    vfi.style.setProperty("height",h+20+"px","important");
                 }
             }
             function then()
@@ -813,5 +818,29 @@ function fuck()
         setTimeout(fuck,1000);
     }
 }
-fuck();
+/**@type {Array} chrome插件设置*/
+var settings=null;
+try
+{
+    if(chrome==undefined||chrome.storage==undefined)throw new Error('chrome.storage未定义');
+    chrome.storage.sync.get(function(data)
+    {
+        settings=data;
+        var r=scheck(settings,function(){
+            chrome.storage.sync.get(function(data)
+            {
+                settings=data;
+                console.log(data);
+                fuck();
+            });
+        });
+        if(!r)fuck();
+    });
+}
+catch(e)
+{
+    console.log(e);
+    settings=null;
+    fuck();
+}
 })();
