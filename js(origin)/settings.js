@@ -74,12 +74,8 @@ function scheck(settings,callback,o=0)
         /**@type {Array<number>} 当前设置版本数组*/
         var sv=getv(settings.version);
         var r=comv(nv,sv);
-        if(r==-1)
-        {
-            need=true;
-            getnews();
-        }
-        else if(r==0)//版本相同
+        /**@export 当前版本检查*/
+        function needcheck()
         {
             /**设置需要的内容
              * @param {string} key 需要设置的设置名字
@@ -129,8 +125,26 @@ function scheck(settings,callback,o=0)
             isn('showvc','Boolean',false);
             isn('showac','Boolean',false);
         }
+        if(r==-1)
+        {
+            need=true;
+            getnews();
+        }
+        else if(r==0)//版本相同
+        {
+            needcheck();
+        }
         else//需要升级设置
-        {}
+        {
+            /**设置与当前版本相同*/
+            function equalnow()
+            {
+                need=true;
+                getnews();
+                needcheck();
+            }
+            if(!comv(sv,[1,0,5]))equalnow();
+        }
     }
     if(need)
     {

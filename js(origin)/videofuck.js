@@ -2,6 +2,8 @@ console.log('videofuck.js');
 (function(){
 /**@type {HTMLCollectionOf<HTMLIFrameElement>} */
 var vf=null;
+/**@constant {string} 超星学习通数据*/
+var cxsturl="https://mooc1-2.chaoxing.com/ananas/status/";
 function fuck()
 {
     var a=document.getElementsByTagName('iframe');
@@ -108,6 +110,8 @@ function fuck()
                     {
                         var d=vd.createElement('div');
                         var st=vd.createElement('style');
+                        /**@type {number} 插件控制面板高度*/
+                        var ch=100;
                         st.innerText=".id{display:inline-block;}";
                         d.append(st);
                         /**添加 | */
@@ -141,7 +145,7 @@ function fuck()
                                 src.innerText="隐藏插件控制面板";
                                 div2.style.display='block';
                                 if(i2==0)showhidedm(vfi,div3,src,1);
-                                vfi.style.height=h+100+"px";
+                                vfi.style.height=h+ch+"px";
                                 seta(1);
                             }
                             else
@@ -442,6 +446,110 @@ function fuck()
                             }
                         }
                         pbspeedlockbutton.addEventListener('click',function(e){lockrate(e.srcElement)});
+                        div2.append(vd.createElement('br'));
+                        var downloadvideob=vd.createElement('button');
+                        downloadvideob.innerText="下载视频（原视频）";
+                        var downloadvideobm=vd.createElement('button');
+                        downloadvideobm.innerText="下载视频（极速）";
+                        var downloadvideobs=vd.createElement('button');
+                        downloadvideobs.innerText="下载视频（标清）";
+                        var downloadvideobh=vd.createElement('button');
+                        downloadvideobh.innerText="下载视频（高清）";
+                        var downloadaudio=vd.createElement('button');
+                        downloadaudio.innerText="下载音频（MP3）";
+                        var downloadsubb=vd.createElement('button');
+                        downloadsubb.innerText="下载字幕";
+                        downloadsubb.className="id";
+                        var downloadsubd=vd.createElement('div');
+                        downloadsubd.className="id";
+                        var downloadsubs=vd.createElement('select');
+                        downloadsubs.className="id";
+                        downloadsubd.append(downloadsubs);
+                        downloadsubd.append(downloadsubb);
+                        /**@param {HTMLSelectElement} select*/
+                        function downloadsub(select)
+                        {
+                            chrome.runtime.sendMessage({action:"getzm",url:select.value},function(data){console.log(data)});
+                        }
+                        /**@param {string} url*/
+                        function downloadvideo(url)
+                        {
+                            window.open(url,"_blank");
+                        }
+                        var objectid=vfi.getAttribute('objectid');
+                        var mid=vfi.getAttribute('mid');
+                        console.log(objectid);
+                        console.log(mid);
+                        $.getJSON(cxsturl+objectid,function(data,success){
+                            console.log(data);
+                            var have=false;
+                            if(data['download']!=undefined)
+                            {
+                                have=true;
+                                (function(d){downloadvideob.addEventListener('click',function(){downloadvideo(d)})})(data.download);
+                                div2.append(downloadvideob);
+                            }
+                            if(data['httpmd']!=undefined)
+                            {
+                                have=true;
+                                (function(d){downloadvideobm.addEventListener('click',function(){downloadvideo(d)})})(data.httpmd);
+                                div2.append(downloadvideobm);
+                            }
+                            if(data['http']!=undefined)
+                            {
+                                have=true;
+                                (function(d){downloadvideobs.addEventListener('click',function(){downloadvideo(d)})})(data.http);
+                                div2.append(downloadvideobs);
+                            }
+                            if(data['httphd']!=undefined)
+                            {
+                                have=true;
+                                (function(d){downloadvideobh.addEventListener('click',function(){downloadvideo(d)})})(data.httphd);
+                                div2.append(downloadvideobh);
+                            }
+                            if(data['mp3']!=undefined)
+                            {
+                                have=true;
+                                (function(d){downloadaudio.addEventListener('click',function(){downloadvideo(d)})})(data.mp3);
+                                div2.append(downloadaudio);
+                            }
+                            $.getJSON("https://mooc1-2.chaoxing.com/richvideo/subtitle",{'mid':mid,'_dc':getnow()},function(data,success)
+                            {
+                                if(data.length)
+                                {
+                                    console.log(data);
+                                    if(have)
+                                    {
+                                        div2.append(vd.createElement('br'));
+                                        ch=150;
+                                    }
+                                    else ch=130;
+                                    div2.append(downloadsubd);
+                                    /**@param data 字幕返回的object*/
+                                    function createoption(data)
+                                    {
+                                        var option=vd.createElement('option');
+                                        option.innerText=data.name;
+                                        option.value=data.url;
+                                        downloadsubs.append(option);
+                                        if(data.selected)downloadsubs.value=data.url;
+                                    }
+                                    for(var i=0;i<data.length;i++)
+                                    {
+                                        createoption(data[i]);
+                                    }
+                                    downloadsubb.addEventListener('click',function(){downloadsub(downloadsubs)});
+                                }
+                                else if(have)
+                                {
+                                    ch=130;
+                                }
+                                if(ch!=100&&settings!=null&&settings.showvc&&div.getAttribute('i')=="1")
+                                {
+                                    vfi.style.height=h+ch+"px";
+                                }
+                            })
+                        });
                         var div3=vd.createElement('div');
                         div3.innerText="隐藏弹幕行";
                         div3.className="id";
@@ -572,7 +680,7 @@ function fuck()
                             {
                                 src.innerText="隐藏音频控制台";
                                 d2.style.display=null;
-                                vfi.style.setProperty('height',h+110+"px","important");
+                                vfi.style.setProperty('height',h+130+"px","important");
                                 seta(1);
                             }
                         }
@@ -740,6 +848,32 @@ function fuck()
                         pbrd.append(pbro);
                         pbrb.addEventListener('click',function(){pbr(pbri,pbro)});
                         d2.append(pbrd);
+                        d2.append(vd.createElement('br'));
+                        /**@param {string} url*/
+                        function downloadaudio(url)
+                        {
+                            window.open(url,'_blank');
+                        }
+                        var downloadaudiob=vd.createElement('button');
+                        downloadaudiob.innerText="下载音频（原音频）";
+                        var downloadaudiob2=vd.createElement('button');
+                        downloadaudiob2.innerText="下载音频（在线）";
+                        var objectid=vfi.getAttribute('objectid');
+                        console.log(objectid);
+                        $.getJSON(cxsturl+objectid,function(data,success)
+                        {
+                            console.log(data);
+                            if(data['download']!=undefined)
+                            {
+                                (function(d){downloadaudiob.addEventListener('click',function(){downloadaudio(d)})})(data.download);
+                                d2.append(downloadaudiob);
+                            }
+                            if(data['http']!=undefined)
+                            {
+                                (function(d){downloadaudiob2.addEventListener('click',function(){downloadaudio(d)})})(data.http);
+                                d2.append(downloadaudiob2);
+                            }
+                        });
                         vfi.style.setProperty("height",h+20+"px","important");
                         if(settings!=null&&settings.showac)shwohideacontrol(div2,d2);
                         return [st,div,d2];
@@ -842,5 +976,10 @@ catch(e)
     console.log(e);
     settings=null;
     fuck();
+}
+function getnow()
+{
+var d=new Date();
+return d.getTime();
 }
 })();
