@@ -1,10 +1,10 @@
 {
     "manifest_version":2,
     "name":"超星学习通辅助插件",
-    "version":"1.0.6",
+    "version":"1.0.7",
     "description":"你懂的，源代码：https://github.com/lifegpc/fuckchaoxing",
     "author":"lifegpc",
-    "permissions":["https://*.chaoxing.com/","http://*.chaoxing.com/","storage","tabs"],
+    "permissions":["https://*.chaoxing.com/","http://*.chaoxing.com/","http://*.5read.com/","storage","tabs"],
     "background":
     {
         "scripts":["jso/jquery-3.4.1.min.js","js/background.js"]
@@ -13,6 +13,15 @@
     [{
         "matches":["https://mooc1-2.chaoxing.com/mycourse/studentstudy*","http://mooc1-2.chaoxing.com/mycourse/studentstudy*"],
         "js":["jso/jquery-3.4.1.min.js","js/settings.js","js/videofuck.js"]
+    },
+    {
+        "matches":["https://readsvr-dx.chaoxing.com/n/readsvr/book/mooc/*","http://readsvr-dx.chaoxing.com/n/readsvr/book/mooc/*","https://resapi.chaoxing.com/innerurlNew?showshidu=false&gcebook=*","http://resapi.chaoxing.com/innerurlNew?showshidu=false&gcebook=*"],
+        "js":["jso/jszip.min.js","jso/FileSaver.min.js","js/bookfuck.js"],
+        "all_frames":true
+    },
+    {
+        "matches":["http://*.5read.com/image/ss2jpg.dll*"],
+        "js":["js/bookimg.js"]
     }],
     "options_page":"options.html",
     "browser_action":

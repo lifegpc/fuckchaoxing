@@ -143,7 +143,7 @@ function scheck(settings,callback,o=0)
                 getnews();
                 needcheck();
             }
-            if(!comv(sv,[1,0,5]))equalnow();
+            if(!comv(sv,[1,0,5])||!comv(sv,[1,0,6]))equalnow();
         }
     }
     if(need)

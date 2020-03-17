@@ -3,4 +3,5 @@
 视频倍速播放，强制继续播放
 ## 第三方库
 [jQuery](https://jquery.com/)   
-[FileSaver](https://github.com/eligrey/FileSaver.js/)
+[FileSaver](https://github.com/eligrey/FileSaver.js/)   
+[JSZip](https://github.com/Stuk/jszip)

@@ -457,6 +457,7 @@ function fuck()
                         downloadvideobh.innerText="下载视频（高清）";
                         var downloadaudio=vd.createElement('button');
                         downloadaudio.innerText="下载音频（MP3）";
+                        downloadaudio.style.display="none";//被拒，不知道这URL放API里作甚
                         var downloadsubb=vd.createElement('button');
                         downloadsubb.innerText="下载字幕";
                         downloadsubb.className="id";
@@ -884,6 +885,354 @@ function fuck()
                     for(var j=0;j<r.length;j++)p.insertBefore(r[j],nnode);
                 }
             }
+            /**取得内部的嵌套层
+             * @param {HTMLIFrameElement} vfi
+            */
+            function fuckqbook(vfi)
+            {
+                var vd=vfi.contentDocument;
+                /**书籍信息*/
+                var bookinfo={};
+                /**书籍信息 json*/
+                var bookdata;
+                /**框架内书籍信息*/
+                var bookinfo2=null;
+                function getvd()
+                {
+                    var d2=vfi.contentDocument;
+                    if(d2!=null)
+                    {
+                        vd=d2;
+                        console.log(vd);
+                        getbookinfo();
+                        getfuckbookiframe();
+                    }
+                    else setTimeout(getvd,1000);
+                }
+                setTimeout(getvd,1000);
+                /**获取书的信息*/
+                function getbookinfo()
+                {
+                    bookdata=$.parseJSON(vfi.getAttribute('data'));
+                    console.log(bookdata);
+                    bookinfo.bn=bookdata.bookname;
+                    bookinfo.a=bookdata.author;
+                    bookinfo.p=bookdata.publisher;
+                    bookinfo.pd=bookdata.publishdate;
+                    console.log(bookinfo);
+                }
+                function getfuckbookiframe()
+                {
+                    var fc=vd.getElementsByTagName('iframe');
+                    if(fc.length)
+                    {
+                        console.log(fc);
+                        for(var i=0;i<fc.length;i++)
+                        {
+                            if(fc[i].name=='bookifame')
+                            (function(vfii){fuckbook(vfii)})(fc[i]);
+                        }
+                    }
+                    else setTimeout(getfuckbookiframe,1000);
+                }
+                /**@param {HTMLIFrameElement} vfii*/
+                function fuckbook(vfii)
+                {
+                    if(vfii.hasAttribute('fucked'))return;
+                    var h=vfi.clientHeight;
+                    console.log(vfii);
+                    vfii.setAttribute('fucked',1);
+                    /**比较数据信息是否相等*/
+                    function comparebookinfo(bi1,bi2)
+                    {
+                        return bi1.a==bi2.a&&bi1.bn==bi2.bn;
+                    }
+                    chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+                        if(message.action=="bookfuckc2"&&comparebookinfo(bookinfo,message.bi))
+                        {
+                            sendResponse(bookinfo);
+                            bookinfo2=message.bi;
+                            adddiv();
+                        }
+                    });
+                    console.log('ok');
+                    function adddiv()
+                    {
+                        var p=vfii.parentElement;
+                        for(var i=0;i<p.childElementCount;i++)
+                        {
+                            if(vfii==p.children[i])break;
+                        }
+                        i++;
+                        var node;
+                        if(i==p.childElementCount)node=null; else node=p.children[i];
+                        var st=vd.createElement('style');
+                        st.innerText=".id{display:inline-block;}.id2{font-size:12px;color:red;}";
+                        var div=vd.createElement('div');
+                        div.innerText="显示书籍插件控制面板";
+                        div.className="id2";
+                        div.setAttribute('i',0);
+                        var div2=vd.createElement('div');
+                        div2.className="id2";
+                        div2.style.display="none";
+                        var bookinfod=vd.createElement('div');
+                        var bookinfol1=vd.createElement('div');
+                        bookinfol1.innerText="书籍信息：";
+                        bookinfod.append(bookinfol1);
+                        var bookinfol2=vd.createElement('div');
+                        bookinfol2.innerText="书名：";
+                        bookinfol2.className="id";
+                        bookinfod.append(bookinfol2);
+                        var bookinfobn=vd.createElement('div');
+                        bookinfobn.innerText=bookinfo.bn;
+                        bookinfobn.className="id";
+                        bookinfod.append(bookinfobn);
+                        bookinfod.append(vd.createElement('br'));
+                        var bookinfol3=vd.createElement('div');
+                        bookinfol3.innerText="作者名：";
+                        bookinfol3.className="id";
+                        bookinfod.append(bookinfol3);
+                        var bookinfoa=vd.createElement('div');
+                        bookinfoa.innerText=bookinfo.a;
+                        bookinfoa.className="id";
+                        bookinfod.append(bookinfoa);
+                        bookinfod.append(vd.createElement('br'));
+                        var bookinfol4=vd.createElement('div');
+                        bookinfol4.innerText="出版社：";
+                        bookinfol4.className="id";
+                        bookinfod.append(bookinfol4);
+                        var bookinfop=vd.createElement('div');
+                        if(bookinfo.p==bookinfo2.p)
+                        {
+                            bookinfop.innerText=bookinfo.p;
+                        }
+                        else
+                        {
+                            bookinfop.innerText=bookinfo.p+"("+bookinfo2.p+")";
+                        }
+                        bookinfop.className="id";
+                        bookinfod.append(bookinfop);
+                        bookinfod.append(vd.createElement('br'));
+                        var bookinfol5=vd.createElement('div');
+                        bookinfol5.innerText="出版时间：";
+                        bookinfol5.className="id";
+                        bookinfod.append(bookinfol5);
+                        var bookinfopd=vd.createElement('div');
+                        if(bookinfo.pd==bookinfo2.pd)
+                        {
+                            bookinfopd.innerText=bookinfo.pd;
+                        }
+                        else
+                        {
+                            bookinfopd.innerText=bookinfo.pd+"("+bookinfo2.pd+")";
+                        }
+                        bookinfopd.className="id";
+                        bookinfod.append(bookinfopd);
+                        div2.append(bookinfod);
+                        var bookdownd=vd.createElement('div');
+                        var bookdownl=vd.createElement('div');
+                        bookdownl.innerText="下载书籍：";
+                        bookdownl.className="id";
+                        bookdownd.append(bookdownl);
+                        var bookdowns=vd.createElement('select');
+                        var bookdowno1=vd.createElement('option');
+                        bookdowno1.value="zip";
+                        bookdowno1.innerText="zip";
+                        bookdowns.append(bookdowno1);
+                        bookdowns.value=bookdowno1.value;
+                        bookdownd.append(bookdowns);
+                        bookdowns.className="id";
+                        var bookdownb=vd.createElement('button');
+                        bookdownb.className="id";
+                        bookdownb.innerText="下载";
+                        /**@type {boolean} 是否正在下载书籍*/
+                        var bookdownz=false;
+                        /**发起下书或停止下书的请求
+                         * @param {HTMLButtonElement} src
+                         * @param {HTMLSelectElement} s
+                        */
+                        function downloadbook(src,s)
+                        {
+                            if(bookdownz)
+                            {
+                                src.disabled=true;
+                                //发出停止请求
+                                chrome.runtime.sendMessage({action:"downloadbooks",bi:bookinfo});
+                            }
+                            else
+                            {
+                                src.disabled=true;
+                                //发出下书请求
+                                chrome.runtime.sendMessage({action:'downloadbook',bi:bookinfo,e:s.value});
+                            }
+                        }
+                        chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+                            if(message.action=="downloadbook3"&&comparebookinfo(bookinfo,message.r))
+                            {
+                                bookdownz=true;
+                                sendResponse(1);
+                                bookdownb.innerText="停止下载";
+                                bookdownb.disabled=false;
+                                bookdowno.innerText="已经开始下载";
+                            }
+                            if(message.action=="downloadbooks3"&&comparebookinfo(bookinfo,message.r))
+                            {
+                                bookdownz=false;
+                                sendResponse(1);
+                                bookdownb.innerText="下载";
+                                bookdownb.disabled=false;
+                                bookdowno.innerText="停止下载成功";
+                            }
+                            if(message.action=="downloadbookc2"&&comparebookinfo(bookinfo,message.bi))
+                            {
+                                bookdownz=false;
+                                sendResponse(1);
+                                bookdownb.innerText="下载";
+                                bookdownb.disabled=false;
+                                bookdowno.innerText="下载成功";
+                            }
+                            if(message.action=="bookautoscroll3"&&comparebookinfo(bookinfo,message.r))
+                            {
+                                autoscrollz=true;
+                                sendResponse(1);
+                                bookscrollb.innerText="停止自动滚动";
+                                bookscrollb.disabled=false;
+                                bookscrollo.innerText="已经开始自动滚动";
+                            }
+                            if(message.action=="bookautoscrolls3"&&comparebookinfo(bookinfo,message.r))
+                            {
+                                autoscrollz=false;
+                                sendResponse(1);
+                                bookscrollb.innerText="自动滚动";
+                                bookscrollb.disabled=false;
+                                bookscrollo.innerText="自动滚动已停止";
+                            }
+                            if(message.action=="bookautoscrollc2"&&comparebookinfo(bookinfo,message.bi))
+                            {
+                                autoscrollz=false;
+                                sendResponse(1);
+                                bookscrollb.innerText="自动滚动";
+                                bookscrollb.disabled=false;
+                                bookscrollo.innerText="自动滚动已自动停止";
+                            }
+                            if(message.action=="downloadbooki2"&&comparebookinfo(bookinfo,message.bi))//下载信息
+                            {
+                                bookdowno.innerText=message.n+"/"+message.l;
+                                sendResponse(1);
+                            }
+                        });
+                        (function(s){bookdownb.addEventListener('click',function(e){downloadbook(e.srcElement,s)});})(bookdowns);
+                        bookdownd.append(bookdownb);
+                        var bookdowno=vd.createElement('div');
+                        bookdowno.className="id";
+                        bookdownd.append(bookdowno);
+                        div2.append(bookdownd);
+                        var bookscrolld=vd.createElement('div');
+                        var bookscrolll1=vd.createElement('div');
+                        bookscrolll1.innerText="自动滚动方向：";
+                        bookscrolll1.className="id";
+                        bookscrolld.append(bookscrolll1);
+                        var bookscrolls=vd.createElement('select');
+                        bookscrolls.className="id";
+                        var bookscrollo1=vd.createElement('option');
+                        bookscrollo1.innerText="向下";
+                        bookscrollo1.value="down";
+                        bookscrolls.append(bookscrollo1);
+                        var bookscrollo2=vd.createElement('option');
+                        bookscrollo2.innerText="向上";
+                        bookscrollo2.value="up";
+                        bookscrolls.append(bookscrollo2);
+                        bookscrolls.value=bookscrollo1.value;
+                        bookscrolld.append(bookscrolls);
+                        var bookscrolll2=vd.createElement('div');
+                        bookscrolll2.innerText="自动滚动速度：";
+                        bookscrolll2.className="id";
+                        bookscrolld.append(bookscrolll2);
+                        var bookscrolli=vd.createElement('input');
+                        bookscrolli.value=100;
+                        bookscrolli.className="id";
+                        bookscrolli.style.width="50px";
+                        bookscrolld.append(bookscrolli);
+                        var bookscrolll3=vd.createElement('div');
+                        bookscrolll3.innerText="像素/s";
+                        bookscrolll3.className="id";
+                        bookscrolld.append(bookscrolll3);
+                        bookscrolld.append(vd.createElement('br'));
+                        var bookscrolll4=vd.createElement('div');
+                        bookscrolll4.innerText="每秒钟滚动次数：";
+                        bookscrolll4.className="id";
+                        bookscrolld.append(bookscrolll4);
+                        var bookscrolli2=vd.createElement('input');
+                        bookscrolli2.value=1;
+                        bookscrolli2.className="id";
+                        bookscrolli2.style.width="50px";
+                        bookscrolld.append(bookscrolli2);
+                        var bookscrollb=vd.createElement('button');
+                        bookscrollb.innerText="自动滚动";
+                        bookscrollb.className="id";
+                        /**@type {boolean} 是否正在自动滚动*/
+                        var autoscrollz=false;
+                        function autoscroll()
+                        {
+                            if(autoscrollz)
+                            {
+                                bookscrollb.disabled=true;
+                                //发送停止请求
+                                chrome.runtime.sendMessage({action:"bookautoscrolls",bi:bookinfo});
+                            }
+                            else
+                            {
+                                var speed=bookscrolli.value-1+1;
+                                if(isNaN(speed)){bookscrollo.innerText="自动滚动速度不是数字";return;}
+                                if(speed<1){bookscrollo.innerText="自动滚动速度应大于等于1";return;}
+                                var speed2=Math.round(bookscrolli2.value-1+1);
+                                if(isNaN(speed2)){bookscrollo.innerText="每秒钟滚动次数不是数字";return;}
+                                if(speed2<1||speed2>100){bookscrollo.innerText="每秒钟滚动次数应是1-100间的整数";return;}
+                                bookscrollb.disabled=true;
+                                //发出自动滚动请求
+                                chrome.runtime.sendMessage({action:"bookautoscroll",bi:bookinfo,f:bookscrolls.value,s:speed,j:speed2});
+                            }
+                        }
+                        bookscrollb.addEventListener('click',autoscroll);
+                        bookscrolld.append(bookscrollb);
+                        var bookscrollo=vd.createElement('div');
+                        bookscrollo.className="id";
+                        bookscrolld.append(bookscrollo);
+                        div2.append(bookscrolld);
+                        /**@param {HTMLDivElement} src
+                         * @param {HTMLDivElement} div2
+                        */
+                        function showhidebcontrols(src,div2)
+                        {
+                            var i=src.getAttribute('i')-1+1;
+                            function seta(value)
+                            {
+                                src.setAttribute('i',value);
+                            }
+                            if(i)
+                            {
+                                div2.style.display="none";
+                                src.innerText="显示书籍插件控制面板";
+                                vfi.style.setProperty('height',h+20+"px","important");
+                                seta(0);
+                            }
+                            else
+                            {
+                                div2.style.display=null;
+                                src.innerText="隐藏书籍插件控制面板";
+                                vfi.style.setProperty('height',h+170+"px","important");
+                                seta(1);
+                            }
+                        }
+                        (function(div,div2){div.addEventListener('click',function(e){showhidebcontrols(e.srcElement,div2)})})(div,div2);
+                        p.insertBefore(st,node);
+                        p.insertBefore(div,node);
+                        p.insertBefore(div2,node);
+                        vfii.style.height=h+"px";
+                        vfi.style.setProperty('height',h+20+"px","important");
+                    }
+                }
+            }
             function then()
             {for(var i=0;i<vff.length;i++)
             {
@@ -899,6 +1248,10 @@ function fuck()
                     {
                         (function(vfi){fuckaudio(vfi);})(vff[i]);
                         break;
+                    }
+                    else if(vff[i].classList[j]=="ans-book")
+                    {
+                        (function(vfi){fuckqbook(vfi);})(vff[i]);
                     }
                 }
             }}
