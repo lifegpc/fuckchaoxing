@@ -1230,6 +1230,220 @@ function fuck()
                         p.insertBefore(div2,node);
                         vfii.style.height=h+"px";
                         vfi.style.setProperty('height',h+20+"px","important");
+                        if(settings!=null&&settings.showbk)
+                        {
+                            showhidebcontrols(div,div2);
+                        }
+                    }
+                }
+            }
+            /**@param {HTMLIFrameElement} vfi*/
+            function fuckdocpdf(vfi)
+            {
+                var vd=vfi.contentDocument;
+                /**@type {HTMLDivElement} img*/
+                var img=null;
+                function getvd()
+                {
+                    var vv=vfi.contentDocument;
+                    if(vv!=null)
+                    {
+                        vd=vv;
+                        console.log(vd);
+                        getimg();
+                    }
+                    else setTimeout(getvd,1000);
+                }
+                getvd();
+                function getimg()
+                {
+                    var img2=vd.getElementById('img')
+                    if(img2!=null)
+                    {
+                        img=img2;
+                        console.log(img);
+                        fuckimg();
+                    }
+                    else setTimeout(getimg,1000);
+                }
+                function fuckimg()
+                {
+                    if(img.hasAttribute('fucked'))return;
+                    img.setAttribute('fucked',1);
+                    var h=vfi.clientHeight;
+                    var p=img.parentElement;
+                    for(var i=0;i<p.childElementCount;i++)
+                    {
+                        if(img==p.children[i])break;
+                    }
+                    i++;
+                    var st=vd.createElement('style');
+                    st.innerText=".id{display:inline-block;}.id2{font-size:12px;color:red;}";
+                    var div=vd.createElement('div');
+                    div.innerText="显示pdf控制面板";
+                    div.className="id2";
+                    var div2=vd.createElement('div');
+                    div2.style.display="none";
+                    div2.className="id2";
+                    /**@param {HTMLDivElement} src*/
+                    function showhidepdfcontrols(src)
+                    {
+                        var i=src.getAttribute('i')-1+1;
+                        function seta(value)
+                        {
+                            src.setAttribute('i',value);
+                        }
+                        if(i)
+                        {
+                            src.innerText="显示pdf控制面板";
+                            div2.style.display="none";
+                            vfi.style.height=h+40+"px";
+                            seta(0);
+                        }
+                        else
+                        {
+                            src.innerText="隐藏pdf控制面板";
+                            div2.style.display=null;
+                            vfi.style.height=h+100+"px";
+                            seta(1);
+                        }
+                    }
+                    div.addEventListener('click',function(e){showhidepdfcontrols(e.srcElement)});
+                    var imgscolld=vd.createElement('div');
+                    var imgscolll1=vd.createElement('div');
+                    imgscolll1.className="id";
+                    imgscolll1.innerText="自动滚动方向：";
+                    imgscolld.append(imgscolll1);
+                    div2.append(imgscolld);
+                    var imgscolls=vd.createElement('select');
+                    imgscolls.className="id";
+                    var imgscollo1=vd.createElement('option');
+                    imgscollo1.innerText="向下";
+                    imgscollo1.value="down";
+                    imgscolls.append(imgscollo1);
+                    var imgscollo2=vd.createElement('option');
+                    imgscollo2.innerText="向上";
+                    imgscollo2.value="up";
+                    imgscolls.append(imgscollo2);
+                    imgscolls.value=imgscollo1.value;
+                    imgscolld.append(imgscolls);
+                    var imgscolll2=vd.createElement('div');
+                    imgscolll2.className="id";
+                    imgscolll2.innerText="自动滚动速度：";
+                    imgscolld.append(imgscolll2);
+                    var imgscolli=vd.createElement('input');
+                    imgscolli.value=100;
+                    imgscolli.style.width="50px";
+                    imgscolli.className="id";
+                    imgscolld.append(imgscolli);
+                    var imgscolll3=vd.createElement('div');
+                    imgscolll3.className="id";
+                    imgscolll3.innerText="像素/s";
+                    imgscolld.append(imgscolll3);
+                    imgscolld.append(vd.createElement('br'));
+                    var imgscolll4=vd.createElement('div');
+                    imgscolll4.className="id";
+                    imgscolll4.innerText="每秒钟滚动次数：";
+                    imgscolld.append(imgscolll4);
+                    var imgscolli2=vd.createElement('input');
+                    imgscolli2.className="id";
+                    imgscolli2.value=1;
+                    imgscolli2.style.width="50px";
+                    imgscolld.append(imgscolli2);
+                    var imgscollb=vd.createElement('button');
+                    imgscollb.className="id";
+                    imgscollb.innerText="自动滚动";
+                    imgscollb.setAttribute('i',0);
+                    imgscolld.append(imgscollb);
+                    var imgscollo=vd.createElement('div');
+                    imgscollo.className="id";
+                    imgscolld.append(imgscollo);
+                    /**@type {number} img滚动计时器ID*/
+                    var imgsid=null;
+                    /**@param {number} lastTop 上一次滚动的位置
+                     * @param {number} s 每次滚动的距离 正向下 负向上
+                     * @param {number} j 计时器间隔
+                    */
+                    function imgscroll(lastTop,s,j)
+                    {
+                        img.scrollTo(img.scrollLeft,lastTop+s);
+                        if(lastTop!=img.scrollTop)
+                        {
+                            (function(lastTop){imgsid=setTimeout(function(){imgscroll(lastTop,s,j)},j);})(img.scrollTop);
+                        }
+                        else
+                        {
+                            imgsid=null;
+                            imgscollb.setAttribute('i',0);
+                            imgscollb.innerText="自动滚动";
+                            imgscollo.innerText="已自动停止滚动";
+                        }
+                    }
+                    /**@param {HTMLButtonElement} src*/
+                    function imgscrollb(src)
+                    {
+                        var i=src.getAttribute('i')-1+1;
+                        if(i)
+                        {
+                            if(imgsid!=null)
+                            {
+                                clearTimeout(imgsid);
+                                imgsid=null;
+                            }
+                            src.setAttribute('i',0);
+                            src.innerText="自动滚动";
+                            imgscollo.innerText="已停止滚动";
+                        }
+                        else
+                        {
+                            var speed=imgscolli.value-1+1;
+                            if(isNaN(speed)){imgscollo.innerText="自动滚动速度不是数字";return;}
+                            if(speed<1){imgscollo.innerText="自动滚动速度应大于等于1";return;}
+                            var speed2=Math.round(imgscolli2.value-1+1);
+                            if(isNaN(speed2)){imgscollo.innerText="每秒钟滚动次数不是数字";return;}
+                            if(speed2<1||speed2>100){imgscollo.innerText="每秒钟滚动次数应是1-100间的整数";return;}
+                            src.setAttribute('i',1);
+                            src.innerText="停止自动滚动";
+                            var s=speed/speed2;
+                            if(imgscolls.value=="up")s*=-1;
+                            imgscroll(img.scrollTop,s,1000/speed2);
+                            imgscollo.innerText="已开始自动滚动";
+                        }
+                    }
+                    imgscollb.addEventListener('click',function(e){imgscrollb(e.srcElement)});
+                    var downloadb=vd.createElement('button');
+                    downloadb.innerText="下载原文件";
+                    var downloadpb=vd.createElement('button');
+                    downloadpb.innerText="下载pdf文件";
+                    function download(url)
+                    {
+                        window.open(url,"_blank");
+                    }
+                    var objectid=vfi.getAttribute('objectid');
+                    console.log(objectid);
+                    $.getJSON(cxsturl+objectid,function(data)
+                    {
+                        console.log(data);
+                        if(data.download!=undefined)
+                        {
+                            div2.append(downloadb);
+                            (function(url){downloadb.addEventListener('click',function(){download(url)})})(data.download);
+                        }
+                        if(data.pdf!=undefined)
+                        {
+                            div2.append(downloadpb);
+                            (function(url){downloadpb.addEventListener('click',function(){download(url)})})(data.pdf);
+                        }
+                    });
+                    var node=null;
+                    if(i<p.childElementCount)node=p.children[i];
+                    p.insertBefore(st,node);
+                    p.insertBefore(div,node);
+                    p.insertBefore(div2,node);
+                    vfi.style.height=h+40+"px";
+                    if(settings!=null&&settings.showpdf)
+                    {
+                        showhidepdfcontrols(div);
                     }
                 }
             }
@@ -1252,6 +1466,10 @@ function fuck()
                     else if(vff[i].classList[j]=="ans-book")
                     {
                         (function(vfi){fuckqbook(vfi);})(vff[i]);
+                    }
+                    else if(vff[i].classList[j]=="insertdoc-online-pdf")
+                    {
+                        (function(vfi){fuckdocpdf(vfi);})(vff[i]);
                     }
                 }
             }}

@@ -58,6 +58,8 @@ function scheck(settings,callback,o=0)
         news.hidedm=false;
         news.showvc=false;
         news.showac=false;
+        news.showbk=false;
+        news.showpdf=false;
     }
     if(o==1)
     {
@@ -124,6 +126,8 @@ function scheck(settings,callback,o=0)
             isn('hidedm','Boolean',false);
             isn('showvc','Boolean',false);
             isn('showac','Boolean',false);
+            isn('showbk','Boolean',false);
+            isn('showpdf','Boolean',false);
         }
         if(r==-1)
         {
@@ -143,7 +147,25 @@ function scheck(settings,callback,o=0)
                 getnews();
                 needcheck();
             }
-            if(!comv(sv,[1,0,5])||!comv(sv,[1,0,6]))equalnow();
+            /**检查并设置内容
+             * @param {string} key 设置名称
+             * @param {string} name constructor名字
+             * @param obj 应设值
+             */
+            function isn2(key,name,obj)
+            {
+                if(!isa(obj[key],name))news[key]=obj[key];
+            }
+            if(comv(sv,[1,0,4])==1&&comv(sv,[1,0,8])==-1)
+            {
+                need=true;
+                getnews();
+                isn2('vpautoplay','Boolean',settings);
+                isn2('apautoplay','Boolean',settings);
+                isn2('hidedm','Boolean',settings);
+                isn2('showvc','Boolean',settings);
+                isn2('showac','Boolean',settings);
+            }
         }
     }
     if(need)

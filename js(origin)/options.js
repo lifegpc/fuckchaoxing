@@ -13,6 +13,8 @@ function set(setting=settings)
     d.getElementById('hidedm').value=setting.hidedm;
     d.getElementById('showvc').value=setting.showvc;
     d.getElementById('showac').value=setting.showac;
+    d.getElementById('showbk').value=setting.showbk;
+    d.getElementById('showpdf').value=settings.showpdf;
 }
 function get()
 {chrome.storage.sync.get(function(data)
@@ -41,6 +43,8 @@ function save()
     qd.hidedm=d.getElementById('hidedm').value=="true";
     qd.showvc=d.getElementById('showvc').value=="true";
     qd.showac=d.getElementById('showac').value=="true";
+    qd.showbk=d.getElementById('showbk').value=="true";
+    qd.showpdf=d.getElementById('showpdf').value=="true";
     chrome.storage.sync.set(qd);
 }
 d.addEventListener('DOMContentLoaded',function(){
