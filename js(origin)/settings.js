@@ -20,12 +20,14 @@ function scheck(settings,callback,o=0)
     /**比较版本数组
      * @param {Array<number>} v1 版本数组
      * @param {Array<number>} v2 版本数组
+     * @param {number} c 第几个
      * @returns {-1|0|1} 前面大 1，相等 0，后面大 -1*/
-    function comv(v1,v2)
+    function comv(v1,v2,c=0)
     {
-        if (v1>v2)return 1;
-        else if(v1<v2)return -1;
-        else return 0;
+        if (v1[c]>v2[c])return 1;
+        else if(v1[c]<v2[c])return -1;
+        else if(c==2)return 0;
+        else return comv(v1,v2,c+1);
     }
     /**判断obj是否为name类型
      * @param {string} name constructor名字
@@ -61,6 +63,8 @@ function scheck(settings,callback,o=0)
         news.showbk=false;
         news.showpdf=false;
         news.showppt=false;
+        news.showta=false;
+        news.tatxt=false;
     }
     if(o==1)
     {
@@ -130,6 +134,8 @@ function scheck(settings,callback,o=0)
             isn('showbk','Boolean',false);
             isn('showpdf','Boolean',false);
             isn('showppt','Boolean',false);
+            isn('showta','Boolean',false);
+            isn('tatxt','Boolean',false);
         }
         if(r==-1)
         {
@@ -171,6 +177,10 @@ function scheck(settings,callback,o=0)
                 isn2('showbk','Boolean',settings);
                 isn2('showpdf','Boolean',settings);
             }
+            function v3()
+            {
+                isn2('showppt','Boolean',settings);
+            }
             if(comv(sv,[1,0,4])==1&&comv(sv,[1,0,8])==-1)
             {
                 need=true;
@@ -183,6 +193,14 @@ function scheck(settings,callback,o=0)
                 getnews();
                 v1();
                 v2();
+            }
+            if(!comv(sv,[1,0,9]))
+            {
+                need=true;
+                getnews();
+                v1();
+                v2();
+                v3();
             }
         }
     }
