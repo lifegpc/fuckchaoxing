@@ -15,6 +15,7 @@ function set(setting=settings)
     d.getElementById('showac').value=setting.showac;
     d.getElementById('showbk').value=setting.showbk;
     d.getElementById('showpdf').value=settings.showpdf;
+    d.getElementById('showppt').value=settings.showppt;
 }
 function get()
 {chrome.storage.sync.get(function(data)
@@ -45,6 +46,7 @@ function save()
     qd.showac=d.getElementById('showac').value=="true";
     qd.showbk=d.getElementById('showbk').value=="true";
     qd.showpdf=d.getElementById('showpdf').value=="true";
+    qd.showppt=d.getElementById('showppt').value=="true";
     chrome.storage.sync.set(qd);
 }
 d.addEventListener('DOMContentLoaded',function(){

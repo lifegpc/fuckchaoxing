@@ -60,6 +60,7 @@ function scheck(settings,callback,o=0)
         news.showac=false;
         news.showbk=false;
         news.showpdf=false;
+        news.showppt=false;
     }
     if(o==1)
     {
@@ -128,6 +129,7 @@ function scheck(settings,callback,o=0)
             isn('showac','Boolean',false);
             isn('showbk','Boolean',false);
             isn('showpdf','Boolean',false);
+            isn('showppt','Boolean',false);
         }
         if(r==-1)
         {
@@ -156,15 +158,31 @@ function scheck(settings,callback,o=0)
             {
                 if(!isa(obj[key],name))news[key]=obj[key];
             }
-            if(comv(sv,[1,0,4])==1&&comv(sv,[1,0,8])==-1)
+            function v1()
             {
-                need=true;
-                getnews();
                 isn2('vpautoplay','Boolean',settings);
                 isn2('apautoplay','Boolean',settings);
                 isn2('hidedm','Boolean',settings);
                 isn2('showvc','Boolean',settings);
                 isn2('showac','Boolean',settings);
+            }
+            function v2()
+            {
+                isn2('showbk','Boolean',settings);
+                isn2('showpdf','Boolean',settings);
+            }
+            if(comv(sv,[1,0,4])==1&&comv(sv,[1,0,8])==-1)
+            {
+                need=true;
+                getnews();
+                v1();
+            }
+            if(!comv(sv,[1,0,8]))
+            {
+                need=true;
+                getnews();
+                v1();
+                v2();
             }
         }
     }
