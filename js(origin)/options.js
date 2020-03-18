@@ -18,6 +18,8 @@ function set(setting=settings)
     d.getElementById('showppt').value=setting.showppt;
     d.getElementById('showta').value=setting.showta;
     d.getElementById('tatxt').value=setting.tatxt;
+    d.getElementById('showco').value=setting.showco;
+    d.getElementById('coal').value=setting.coal;
 }
 function get()
 {chrome.storage.sync.get(function(data)
@@ -51,6 +53,8 @@ function save()
     qd.showppt=d.getElementById('showppt').value=="true";
     qd.showta=d.getElementById('showta').value=="true";
     qd.tatxt=d.getElementById('tatxt').value=="true";
+    qd.showco=d.getElementById('showco').value=="true";
+    qd.coal=d.getElementById('coal').value=="true";
     chrome.storage.sync.set(qd);
 }
 d.addEventListener('DOMContentLoaded',function(){

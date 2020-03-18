@@ -65,6 +65,8 @@ function scheck(settings,callback,o=0)
         news.showppt=false;
         news.showta=false;
         news.tatxt=false;
+        news.showco=false;
+        news.coal=false;
     }
     if(o==1)
     {
@@ -136,6 +138,8 @@ function scheck(settings,callback,o=0)
             isn('showppt','Boolean',false);
             isn('showta','Boolean',false);
             isn('tatxt','Boolean',false);
+            isn('showco','Boolean',false);
+            isn('coal','Boolean',false);
         }
         if(r==-1)
         {
@@ -174,12 +178,20 @@ function scheck(settings,callback,o=0)
             }
             function v2()
             {
+                v1();
                 isn2('showbk','Boolean',settings);
                 isn2('showpdf','Boolean',settings);
             }
             function v3()
             {
+                v2();
                 isn2('showppt','Boolean',settings);
+            }
+            function v4()
+            {
+                v3();
+                isn2('showta','Boolean',settings);
+                isn2('tatxt','Boolean',settings);
             }
             if(comv(sv,[1,0,4])==1&&comv(sv,[1,0,8])==-1)
             {
@@ -191,16 +203,19 @@ function scheck(settings,callback,o=0)
             {
                 need=true;
                 getnews();
-                v1();
                 v2();
             }
             if(!comv(sv,[1,0,9]))
             {
                 need=true;
                 getnews();
-                v1();
-                v2();
                 v3();
+            }
+            if(!comv(sv,[1,0,10]))
+            {
+                need=true;
+                getnews();
+                v4();
             }
         }
     }

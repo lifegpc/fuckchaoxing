@@ -1,7 +1,7 @@
 {
     "manifest_version":2,
     "name":"超星学习通辅助插件",
-    "version":"1.0.10",
+    "version":"1.0.11",
     "description":"你懂的，源代码：https://github.com/lifegpc/fuckchaoxing",
     "author":"lifegpc",
     "permissions":["https://*.chaoxing.com/","http://*.chaoxing.com/","http://*.5read.com/","storage","tabs"],
@@ -11,7 +11,7 @@
     },
     "content_scripts":
     [{
-        "matches":["https://mooc1-2.chaoxing.com/mycourse/studentstudy*","http://mooc1-2.chaoxing.com/mycourse/studentstudy*"],
+        "matches":["https://*.chaoxing.com/mycourse/studentstudy*","http://*.chaoxing.com/mycourse/studentstudy*"],
         "js":["jso/jquery-3.4.1.min.js","js/settings.js","js/videofuck.js"]
     },
     {
@@ -22,6 +22,11 @@
     {
         "matches":["http://*.5read.com/image/ss2jpg.dll*"],
         "js":["js/bookimg.js"]
+    },
+    {
+        "matches":["https://*.chaoxing.com/course/*","http://*.chaoxing.com/course/*"],
+        "js":["js/settings.js","js/coursefuck.js"],
+        "css":["css/coursefuck.css"]
     }],
     "options_page":"options.html",
     "browser_action":
