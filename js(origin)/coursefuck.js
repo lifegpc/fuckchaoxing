@@ -8,7 +8,7 @@ function fuckcourse()
     div.style.left=db.clientWidth-210+"px";
     div.style.top=db.clientHeight-310+"px";
     var div2=document.createElement('div');
-    div2.innerText="显示课程控制面板";
+    div2.innerText="显示专题控制面板";
     div2.setAttribute('i',0);
     div.append(div2);
     div.draggable="true";
@@ -35,13 +35,13 @@ function fuckcourse()
         var i=div2.getAttribute('i')-1+1;
         if(i)
         {
-            div2.innerText="显示课程控制面板";
+            div2.innerText="显示专题控制面板";
             div3.style.display="none";
             div2.setAttribute('i',0);
         }
         else
         {
-            div2.innerText="隐藏课程控制面板";
+            div2.innerText="隐藏专题控制面板";
             div3.style.display=null;
             div2.setAttribute('i',1);
         }
@@ -55,6 +55,8 @@ function fuckcourse()
     var clicka=null;
     /**@type {number} 加载按钮的滚动高度位置*/
     var clickal=null;
+    /**@type {boolean} 是否加载全部*/
+    var loadall=false;
     function getclick()
     {
         var temp=document.getElementById('loadbutton');
@@ -78,8 +80,17 @@ function fuckcourse()
                         clicka=temp;
                         clicka.addEventListener('click',load);
                         clickal=clicka.offsetTop;
+                        if(loadall)
+                        {
+                            loadallo.innerText=nowload+"/"+chapterlength;
+                            clicka.click();
+                        }
                     }
                     else setTimeout(load2,100);
+                }
+                else if(loadall)
+                {
+                    loadallo.innerText="全部内容已加载完毕";
                 }
             }
             console.log(nowload);
@@ -143,13 +154,40 @@ function fuckcourse()
     scrolll5.innerText="滚动时自动加载内容";
     scrolll5.className="id";
     scrolld.append(scrolll5);
-    scrolld.append(document.createElement('br'));
+    var scrollbr=document.createElement('br')
+    scrolld.append(scrollbr);
     var scrollb=document.createElement('button');
     scrollb.innerText="自动滚动";
     scrollb.setAttribute('i',0);
     scrolld.append(scrollb);
     var scrollo=document.createElement('div');
     scrolld.append(scrollo);
+    var loadalld=document.createElement('div');
+    var loadallb=document.createElement('button');
+    loadallb.innerText="加载所有内容";
+    function loadallba()
+    {
+        loadallb.style.display="none";
+        loadallb.disabled=true;
+        scrolli3.disabled=true;
+        scrolli3.checked=false;
+        scrolli3.style.display="none";
+        scrolll5.style.display="none";
+        scrollbr.remove();
+        loadall=true;
+        function startload()
+        {
+            if(clicka!=null)clicka.click();
+            else setTimeout(startload,1000);
+        }
+        startload();
+    }
+    loadallb.addEventListener('click',loadallba);
+    var loadallo=document.createElement('div');
+    loadallo.className="id";
+    loadalld.append(loadallb);
+    loadalld.append(loadallo);
+    div3.append(loadalld);
     /**@type {number} 计时器ID*/
     var jid=null;
     /**@param {number} lastY 上一次滚动的位置
@@ -205,6 +243,7 @@ function fuckcourse()
     }
     scrollb.addEventListener('click',scrollba);
     if(settings!=null&&settings.showco)showhidecontrols();
+    if(settings!=null&&settings.cola)loadallba();
 }
 /**@type {Array} chrome插件设置*/
 var settings=null;
