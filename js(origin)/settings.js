@@ -231,6 +231,7 @@ function scheck(settings,callback,o=0)
                 getnews();
                 v5();
             }
+            if(!comv(sv,[1,0,12]))equalnow();
         }
     }
     if(need)

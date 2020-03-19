@@ -1797,13 +1797,22 @@ function fuck()
                         div2.append(div2l2);
                         var textarea=vd2.createElement('textarea');
                         textarea.value=bo.innerHTML;
-                        textarea.style="resize:both;overflow:auto;word-wrap:break-word;padding:5px 0;line-height:6px;margin:0;width:100%;";
+                        textarea.style="resize:both;overflow:auto;word-wrap:break-word;padding:5px 0;line-height:normal;margin:0;width:100%;";
                         div2.append(textarea);
                         div2s.addEventListener('change',function()
                         {
                             txt=div2s.value=="txt";
-                            if(txt)textarea.value=bo.innerText;
-                            else textarea.value=bo.innerHTML;
+                            if(txt)
+                            {
+                                textarea.value=bo.innerText;
+                                textarea.style.lineHeight="6px";
+                            }
+                            else
+                            {
+                                textarea.value=bo.innerHTML;
+                                textarea.style.lineHeight="normal";
+                            }
+
                         });
                         bo.addEventListener('keydown',function()
                         {
@@ -1831,6 +1840,7 @@ function fuck()
                             div2s.value=div2o2.value;
                             txt=true;
                             textarea.value=bo.innerText;
+                            textarea.style.lineHeight="6px";
                         }
                     }
                 }

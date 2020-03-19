@@ -2,3 +2,4 @@ td.a{width: 80%;}
 td.b{width: 20%;text-align: right;}
 button.a{margin-right: 4px;}
 td.a div{font-size: 12px;}
+td{border-bottom:1px dashed red;}
