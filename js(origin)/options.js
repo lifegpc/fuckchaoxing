@@ -21,6 +21,10 @@ function set(setting=settings)
     d.getElementById('showco').value=setting.showco;
     d.getElementById('coal').value=setting.coal;
     d.getElementById('cola').value=setting.cola;
+    d.getElementById('zhsvpap').value=setting.zhsvpap;
+    d.getElementById('zhsshowvc').value=setting.zhsshowvc;
+    d.getElementById('zhsctc').value=setting.zhsctc;
+    d.getElementById('zhsant').value=setting.zhsant;
 }
 function get()
 {chrome.storage.sync.get(function(data)
@@ -57,6 +61,10 @@ function save()
     qd.showco=d.getElementById('showco').value=="true";
     qd.coal=d.getElementById('coal').value=="true";
     qd.cola=d.getElementById('cola').value=="true";
+    qd.zhsvpap=d.getElementById('zhsvpap').value=="true";
+    qd.zhsshowvc=d.getElementById('zhsshowvc').value=="true";
+    qd.zhsctc=d.getElementById('zhsctc').value=="true";
+    qd.zhsant=d.getElementById('zhsant').value=="true";
     chrome.storage.sync.set(qd);
 }
 d.addEventListener('DOMContentLoaded',function(){

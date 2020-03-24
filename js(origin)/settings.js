@@ -68,6 +68,10 @@ function scheck(settings,callback,o=0)
         news.showco=false;
         news.coal=false;
         news.cola=false;
+        news.zhsvpap=false;
+        news.zhsshowvc=false;
+        news.zhsctc=false;
+        news.zhsant=false;
     }
     if(o==1)
     {
@@ -142,6 +146,10 @@ function scheck(settings,callback,o=0)
             isn('showco','Boolean',false);
             isn('coal','Boolean',false);
             isn('cola','Boolean',false);
+            isn('zhsvpap','Boolean',false);
+            isn('zhsshowvc','Boolean',false);
+            isn('zhsctc','Boolean',false);
+            isn('zhsant','Boolean',false);
         }
         if(r==-1)
         {
@@ -201,6 +209,11 @@ function scheck(settings,callback,o=0)
                 isn2('showco','Boolean',settings);
                 isn2('coal','Boolean',settings);
             }
+            function v6()
+            {
+                v5();
+                isn2('cola','Boolean',settings);
+            }
             if(comv(sv,[1,0,4])==1&&comv(sv,[1,0,8])==-1)
             {
                 need=true;
@@ -231,7 +244,12 @@ function scheck(settings,callback,o=0)
                 getnews();
                 v5();
             }
-            if(!comv(sv,[1,0,12]))equalnow();
+            if(!comv(sv,[1,0,12])||!comv(sv,[1,0,13]))
+            {
+                need=true;
+                getnews();
+                v6();
+            }
         }
     }
     if(need)
