@@ -250,6 +250,7 @@ function scheck(settings,callback,o=0)
                 getnews();
                 v6();
             }
+            if(!comv(sv,[1,0,14]))equalnow();
         }
     }
     if(need)

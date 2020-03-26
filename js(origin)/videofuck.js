@@ -83,15 +83,24 @@ function fuck()
                 getvd();
                 /**@type {HTMLVideoElement}*/
                 var v;
+                /**@type {HTMLObjectElement} flash*/
+                var vf;
                 /**@param {Document} vd*/
                 function getfuckvideo(vd)
                 {
                     var a=vd.getElementById('video_html5_api');
+                    var aa=vd.getElementsByTagName('object');
                     if(a!=null)
                     {
                         v=a;
                         console.log(v);
                         thendo();
+                    }
+                    else if(aa.length!=0)
+                    {
+                        vf=aa[0];
+                        console.log(vf);
+                        fuckflash();
                     }
                     else setTimeout(function(){getfuckvideo(vd);},1000);
                 }
@@ -510,7 +519,7 @@ function fuck()
                             }
                             if(data['mp3']!=undefined)
                             {
-                                have=true;
+                                //have=true; 被拒暂时不显示
                                 (function(d){downloadaudio.addEventListener('click',function(){downloadvideo(d)})})(data.mp3);
                                 div2.append(downloadaudio);
                             }
@@ -602,6 +611,139 @@ function fuck()
                         p.insertBefore(div2,nnode);
                     }
                     getdiv();
+                }
+                /**处理flash视频*/
+                function fuckflash()
+                {
+                    if(vf.hasAttribute('fucked'))return;
+                    vf.setAttribute('fucked',1);
+                    var p=vf.parentElement.parentElement;
+                    var h=vfi.clientHeight;
+                    for(var i=0;i<p.childElementCount;i++)
+                    {
+                        if(p.children[i]==vf.parentElement)break;
+                    }
+                    i++;
+                    var st=vd.createElement('style');
+                    st.innerText=".id{display:inline-block;}.id2{font-size:12px;color:red;}";
+                    var div=vd.createElement('div');
+                    div.className="id2";
+                    var divl1=vd.createElement('div');
+                    divl1.innerText="显示视频插件控制面板";
+                    divl1.className="id";
+                    divl1.setAttribute('i',0);
+                    div.append(divl1);
+                    var divl2=vd.createElement('div');
+                    divl2.innerText="|";
+                    divl2.className="id";
+                    div.append(divl2);
+                    var divl3=vd.createElement('div');
+                    divl3.innerText="隐藏弹幕行";
+                    divl3.className="id";
+                    divl3.setAttribute('i',1);
+                    div.append(divl3);
+                    function showhidevcotrols()
+                    {
+                        var i=divl1.getAttribute('i')-1+1;
+                        var i2=divl3.getAttribute('i')-1+1;
+                        if(i)
+                        {
+                            divl1.innerText="显示视频插件控制面板";
+                            div2.style.display="none";
+                            if(i2)
+                            {
+                                showhidedm(true);
+                                vfi.style.height=h+10+"px";
+                            }
+                            else
+                            {
+                                vfi.style.height=h-40+"px";
+                            }
+                            divl1.setAttribute('i',0);
+                        }
+                        else
+                        {
+                            divl1.innerText="隐藏视频插件控制面板";
+                            div2.style.display=null;
+                            if(i2)showhidedm(true);
+                            vfi.style.height=h-20+"px";
+                            divl1.setAttribute('i',1);
+                        }
+                    }
+                    divl1.addEventListener('click',showhidevcotrols);
+                    /**@type {HTMLDivElement}*/
+                    var dmh=vd.getElementsByClassName('rage_bd')[0];
+                    /**@param {boolean} f*/
+                    function showhidedm(f=false)
+                    {
+                        var i=divl3.getAttribute('i')-1+1;
+                        var i2=divl1.getAttribute('i')-1+1;
+                        if(i&&i2&&!f)return;
+                        if((i&&!f)||(i&&!i2&&f))
+                        {
+                            divl3.innerText="显示弹幕行";
+                            dmh.style.display="none";
+                            if(!f)divl3.setAttribute('i',0);
+                            vfi.style.height=h-40+"px";
+                        }
+                        else
+                        {
+                            divl3.innerText="隐藏弹幕行";
+                            dmh.style.display=null;
+                            if(!f)divl3.setAttribute('i',1);
+                            vfi.style.height=h+10+"px";
+                        }
+                    }
+                    divl3.addEventListener('click',function(){showhidedm()});
+                    var div2=vd.createElement('div');
+                    div2.className="id2";
+                    div2.style.display="none";
+                    var downloadvb=vd.createElement('button');
+                    downloadvb.innerText="下载视频（原视频）";
+                    var downloadvbm=vd.createElement('button');
+                    downloadvbm.innerText="下载视频（极速）";
+                    var downloadvbs=vd.createElement('button');
+                    downloadvbs.innerText="下载视频（标清）";
+                    var downloadvbh=vd.createElement('button');
+                    downloadvbh.innerText="下载视频（高清）";
+                    function download(url)
+                    {
+                        window.open(url,'_blank');
+                    }
+                    var objectid=vfi.getAttribute('objectid');
+                    console.log(objectid);
+                    $.getJSON(cxsturl+objectid,function(data,success)
+                    {
+                        console.log(data);
+                        if(data.download!=undefined)
+                        {
+                            (function(d){downloadvb.addEventListener('click',function(){download(d)})})(data.download);
+                            div2.append(downloadvb);
+                        }
+                        if(data.httpmd!=undefined)
+                        {
+                            (function(d){downloadvbm.addEventListener('click',function(){download(d)})})(data.httpmd);
+                            div2.append(downloadvbm);
+                        }
+                        if(data.http!=undefined)
+                        {
+                            (function(d){downloadvbs.addEventListener('click',function(){download(d)})})(data.http);
+                            div2.append(downloadvbs);
+                        }
+                        if(data.httphd!=undefined)
+                        {
+                            (function(d){downloadvbh.addEventListener('click',function(){download(d)})})(data.httphd);
+                            div2.append(downloadvbh);
+                        }
+                    });
+                    var node=null;
+                    if(i!=p.childElementCount)node=p.children[i];
+                    p.insertBefore(st,node);
+                    p.insertBefore(div,node);
+                    p.insertBefore(div2,node);
+                    vfi.style.height=h+10+"px";
+                    if(settings!=null&&settings.hidedm)showhidedm();
+                    if(settings!=null&&settings.showvc)showhidevcotrols();
                 }
             }
             /**@param {HTMLIFrameElement} vfi*/
