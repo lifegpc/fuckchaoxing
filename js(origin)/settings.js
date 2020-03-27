@@ -72,6 +72,8 @@ function scheck(settings,callback,o=0)
         news.zhsshowvc=false;
         news.zhsctc=false;
         news.zhsant=false;
+        news.sva=true;
+        news.svc=false;
     }
     if(o==1)
     {
@@ -150,6 +152,8 @@ function scheck(settings,callback,o=0)
             isn('zhsshowvc','Boolean',false);
             isn('zhsctc','Boolean',false);
             isn('zhsant','Boolean',false);
+            isn('sva','Boolean',true);
+            isn('svc','Boolean',false);
         }
         if(r==-1)
         {
@@ -214,6 +218,14 @@ function scheck(settings,callback,o=0)
                 v5();
                 isn2('cola','Boolean',settings);
             }
+            function v7()
+            {
+                v6();
+                isn2('zhsvpap','Boolean',settings);
+                isn2('zhsshowvc','Boolean',settings);
+                isn2('zhsctc','Boolean',settings);
+                isn2('zhsant','Boolean',settings);
+            }
             if(comv(sv,[1,0,4])==1&&comv(sv,[1,0,8])==-1)
             {
                 need=true;
@@ -250,7 +262,12 @@ function scheck(settings,callback,o=0)
                 getnews();
                 v6();
             }
-            if(!comv(sv,[1,0,14])||!comv(sv,[1,0,15]))equalnow();
+            if(comv(sv,[1,0,13])==1&&comv(sv,[1,0,17])==-1)
+            {
+                need=true;
+                getnews();
+                v7();
+            }
         }
     }
     if(need)

@@ -25,6 +25,8 @@ function set(setting=settings)
     d.getElementById('zhsshowvc').value=setting.zhsshowvc;
     d.getElementById('zhsctc').value=setting.zhsctc;
     d.getElementById('zhsant').value=setting.zhsant;
+    d.getElementById('sva').value=setting.sva;
+    d.getElementById('svc').value=setting.svc;
 }
 function get()
 {chrome.storage.sync.get(function(data)
@@ -65,6 +67,8 @@ function save()
     qd.zhsshowvc=d.getElementById('zhsshowvc').value=="true";
     qd.zhsctc=d.getElementById('zhsctc').value=="true";
     qd.zhsant=d.getElementById('zhsant').value=="true";
+    qd.sva=d.getElementById('sva').value=="true";
+    qd.svc=d.getElementById('svc').value=="true";
     chrome.storage.sync.set(qd);
 }
 d.addEventListener('DOMContentLoaded',function(){
