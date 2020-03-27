@@ -678,7 +678,7 @@ function fuck()
                     {
                         var i=divl3.getAttribute('i')-1+1;
                         var i2=divl1.getAttribute('i')-1+1;
-                        if(i&&i2&&!f)return;
+                        if(i2&&!f)return;
                         if((i&&!f)||(i&&!i2&&f))
                         {
                             divl3.innerText="显示弹幕行";
