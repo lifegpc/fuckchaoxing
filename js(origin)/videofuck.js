@@ -3,7 +3,7 @@ console.log('videofuck.js');
 /**@type {HTMLCollectionOf<HTMLIFrameElement>} */
 var vf=null;
 /**@constant {string} 超星学习通数据*/
-var cxsturl="https://mooc1-2.chaoxing.com/ananas/status/";
+var cxsturl=window.location.href.match(/(https:\/\/){0,}(http:\/\/){0,}[^\/]+/)[0]+"/ananas/status/";
 function fuck()
 {
     var a=document.getElementsByTagName('iframe');

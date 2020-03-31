@@ -1,7 +1,7 @@
 {
     "manifest_version":2,
     "name":"超星学习通辅助插件",
-    "version":"1.0.17",
+    "version":"1.0.18",
     "description":"你懂的（同时支持智慧树），源代码：https://github.com/lifegpc/fuckchaoxing",
     "author":"lifegpc",
     "permissions":["https://*.chaoxing.com/","http://*.chaoxing.com/","http://*.5read.com/","storage","tabs","https://*.zhihuishu.com/","http://*.zhihuishu.com/"],
@@ -47,5 +47,12 @@
     "browser_action":
     {
         "default_popup":"license.html"
+    },
+    "icons":
+    {
+        "16":"ico/16.png",
+        "32":"ico/32.png",
+        "48":"ico/48.png",
+        "128":"ico/128.png"
     }
 }
