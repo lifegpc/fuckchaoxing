@@ -43,7 +43,7 @@ function fuck()
                 if(temp!=null)
                 {
                     vfd=vf.contentDocument;
-                    getfuckiframe(vfd);
+                    getfuckmArg(vfd)
                 }
                 else setTimeout(getfuckvfd,1000);
             }
@@ -53,6 +53,7 @@ function fuck()
             /**@param {Document} vfd*/
             function getfuckiframe(vfd)
             {
+                console.log(mArg);
                 var vf2=vfd.getElementsByTagName('iframe');
                 if(vf2.length!=0)
                 {
@@ -61,6 +62,14 @@ function fuck()
                     then();
                 }
                 else (function(vfd){setTimeout(function(){getfuckiframe(vfd)},1000)})(vfd);
+            }
+            /**@param {Document} vfd*/
+            function getfuckmArg(vfd)
+            {
+                var s=vfd.body.outerHTML.match(/mArg = {[^;]+;/)[0];
+                console.log(s);
+                eval(s);
+                getfuckiframe(vfd);
             }
             /**@param {HTMLIFrameElement} vfi*/
             function fuckvideo(vfi)
@@ -456,6 +465,8 @@ function fuck()
                         }
                         pbspeedlockbutton.addEventListener('click',function(e){lockrate(e.srcElement)});
                         div2.append(vd.createElement('br'));
+                        var dcompleteb=vd.createElement('button');
+                        dcompleteb.innerText="直接完成视频";
                         var downloadvideob=vd.createElement('button');
                         downloadvideob.innerText="下载视频（原视频）";
                         var downloadvideobm=vd.createElement('button');
@@ -490,9 +501,32 @@ function fuck()
                         var mid=vfi.getAttribute('mid');
                         console.log(objectid);
                         console.log(mid);
+                        var at=mArg.attachments;
+                        var ad=mArg.defaults;
+                        function dcomplete(data,at)
+                        {
+                            //isdrag 默认 0 播放 2 暂停 3 播完 4
+                            $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag=4&view=pc&enc={10}&rt=0.9&dtype=Video&_t={11}",ad.reportUrl,data.dtoken,ad.clazzId,data.duration+1,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,(data.duration+1)*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),getnow()),function(data,success)
+                            {
+                                console.log(data);
+                                if(data.isPassed)alert("已完成！");
+                            })
+                        }
+                        for(var i3=0;i3<at.length;i3++)
+                        {
+                            if(at[i3].objectId==objectid)break;
+                        }
+                        if(i3<at.length)at=at[i3]; else at=null;
+                        console.log(at);
                         $.getJSON(cxsturl+objectid,function(data,success){
                             console.log(data);
                             var have=false;
+                            if(at.isPassed==undefined)
+                            {
+                                have=true;
+                                (function(a,b){dcompleteb.addEventListener('click',function(){dcomplete(a,b)})})(data,at);
+                                div2.append(dcompleteb);
+                            }
                             if(data['download']!=undefined)
                             {
                                 have=true;
@@ -698,6 +732,8 @@ function fuck()
                     var div2=vd.createElement('div');
                     div2.className="id2";
                     div2.style.display="none";
+                    var dcompleteb=vd.createElement('button');
+                    dcompleteb.innerText="直接完成视频";
                     var downloadvb=vd.createElement('button');
                     downloadvb.innerText="下载视频（原视频）";
                     var downloadvbm=vd.createElement('button');
@@ -712,9 +748,31 @@ function fuck()
                     }
                     var objectid=vfi.getAttribute('objectid');
                     console.log(objectid);
+                    var at=mArg.attachments;
+                    var ad=mArg.defaults;
+                    function dcomplete(data,at)
+                    {
+                        //isdrag 默认 0 播放 2 暂停 3 播完 4
+                        $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag=4&view=pc&enc={10}&rt=0.9&dtype=Video&_t={11}",ad.reportUrl,data.dtoken,ad.clazzId,data.duration+1,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,(data.duration+1)*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),getnow()),function(data,success)
+                        {
+                            console.log(data);
+                            if(data.isPassed)alert("已完成！");
+                        })
+                    }
+                    for(var i3=0;i3<at.length;i3++)
+                    {
+                        if(at[i3].objectId==objectid)break;
+                    }
+                    if(i3<at.length)at=at[i3]; else at=null;
+                    console.log(at);
                     $.getJSON(cxsturl+objectid,function(data,success)
                     {
                         console.log(data);
+                        if(at.isPassed==undefined)
+                        {
+                            (function(a,b){dcompleteb.addEventListener('click',function(){dcomplete(a,b)})})(data,at);
+                            div2.append(dcompleteb);
+                        }
                         if(data.download!=undefined)
                         {
                             (function(d){downloadvb.addEventListener('click',function(){download(d)})})(data.download);
@@ -2105,4 +2163,21 @@ function getnow()
 var d=new Date();
 return d.getTime();
 }
+/**自己实现Ext.String.format 
+ * @param {string} format 格式
+ * @returns {string}
+*/
+function extformat(format,...inp)
+{
+    var need=format.match(/{[0-9]+}/);
+    while(need!=null)
+    {
+        need=need[0];
+        var i2=need.match(/[0-9]+/);
+        if(i2<inp.length)format=format.replace(need,inp[i2]); else format=format.replace(need,"");
+        need=format.match(/{[0-9]+}/);
+    }
+    return format
+}
 })();
+var mArg=null;

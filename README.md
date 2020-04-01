@@ -7,4 +7,7 @@
 ## 第三方库
 [jQuery](https://jquery.com/)   
 [FileSaver](https://github.com/eligrey/FileSaver.js/)   
-[JSZip](https://github.com/Stuk/jszip)
+[JSZip](https://github.com/Stuk/jszip)   
+[JavaScript-MD5](https://github.com/blueimp/JavaScript-MD5)
+## 其他
+本项目的所有JS文件都在js(origin)文件夹中，采用谷歌的[工具](https://developers.google.com/closure/compiler/docs/gettingstarted_api)进行缩减并输出到js文件夹
