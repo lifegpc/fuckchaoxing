@@ -53,7 +53,6 @@ function fuck()
             /**@param {Document} vfd*/
             function getfuckiframe(vfd)
             {
-                console.log(mArg);
                 var vf2=vfd.getElementsByTagName('iframe');
                 if(vf2.length!=0)
                 {
@@ -69,6 +68,7 @@ function fuck()
                 var s=vfd.body.outerHTML.match(/mArg = {[^;]+;/)[0];
                 console.log(s);
                 eval(s);
+                console.log(mArg);
                 getfuckiframe(vfd);
             }
             /**@param {HTMLIFrameElement} vfi*/
@@ -503,10 +503,10 @@ function fuck()
                         console.log(mid);
                         var at=mArg.attachments;
                         var ad=mArg.defaults;
-                        function dcomplete(data,at)
+                        function dcomplete(data,at,rt)
                         {
                             //isdrag 默认 0 播放 2 暂停 3 播完 4
-                            $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag=4&view=pc&enc={10}&rt=0.9&dtype=Video&_t={11}",ad.reportUrl,data.dtoken,ad.clazzId,data.duration+1,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,(data.duration+1)*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),getnow()),function(data,success)
+                            $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag=4&view=pc&enc={10}&rt={11}&dtype=Video&_t={12}",ad.reportUrl,data.dtoken,ad.clazzId,data.duration+1,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,(data.duration+1)*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),rt,getnow()),function(data,success)
                             {
                                 console.log(data);
                                 if(data.isPassed)alert("已完成！");
@@ -518,13 +518,23 @@ function fuck()
                         }
                         if(i3<at.length)at=at[i3]; else at=null;
                         console.log(at);
+                        var dd=vfi.getAttribute('data');
+                        var rt=null;
+                        if(dd!=null)
+                        {
+                            dd=JSON.parse(dd);
+                            console.log(dd);
+                            if(dd.rt)rt=dd.rt;
+                        }
+                        rt=rt?rt:0.9;
+                        console.log(rt);
                         $.getJSON(cxsturl+objectid,function(data,success){
                             console.log(data);
                             var have=false;
                             if(at.isPassed==undefined)
                             {
                                 have=true;
-                                (function(a,b){dcompleteb.addEventListener('click',function(){dcomplete(a,b)})})(data,at);
+                                (function(a,b,c){dcompleteb.addEventListener('click',function(){dcomplete(a,b,c)})})(data,at,rt);
                                 div2.append(dcompleteb);
                             }
                             if(data['download']!=undefined)
@@ -750,10 +760,20 @@ function fuck()
                     console.log(objectid);
                     var at=mArg.attachments;
                     var ad=mArg.defaults;
-                    function dcomplete(data,at)
+                    var dd=vfi.getAttribute('data');
+                    var rt=null;
+                    if(dd!=null)
+                    {
+                        dd=JSON.parse(dd);
+                        console.log(dd);
+                        if(dd.rt)rt=dd.rt;
+                    }
+                    rt=rt?rt:0.9;
+                    console.log(rt);
+                    function dcomplete(data,at,rt)
                     {
                         //isdrag 默认 0 播放 2 暂停 3 播完 4
-                        $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag=4&view=pc&enc={10}&rt=0.9&dtype=Video&_t={11}",ad.reportUrl,data.dtoken,ad.clazzId,data.duration+1,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,(data.duration+1)*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),getnow()),function(data,success)
+                        $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag=4&view=pc&enc={10}&rt={11}&dtype=Video&_t={12}",ad.reportUrl,data.dtoken,ad.clazzId,data.duration+1,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,(data.duration+1)*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),rt,getnow()),function(data,success)
                         {
                             console.log(data);
                             if(data.isPassed)alert("已完成！");
@@ -770,7 +790,7 @@ function fuck()
                         console.log(data);
                         if(at.isPassed==undefined)
                         {
-                            (function(a,b){dcompleteb.addEventListener('click',function(){dcomplete(a,b)})})(data,at);
+                            (function(a,b,c){dcompleteb.addEventListener('click',function(){dcomplete(a,b,c)})})(data,at,rt);
                             div2.append(dcompleteb);
                         }
                         if(data.download!=undefined)
@@ -1055,15 +1075,39 @@ function fuck()
                         {
                             window.open(url,'_blank');
                         }
+                        var dcompleteb=vd.createElement('button');
+                        dcompleteb.innerText="直接完成音频";
                         var downloadaudiob=vd.createElement('button');
                         downloadaudiob.innerText="下载音频（原音频）";
                         var downloadaudiob2=vd.createElement('button');
                         downloadaudiob2.innerText="下载音频（在线）";
                         var objectid=vfi.getAttribute('objectid');
                         console.log(objectid);
+                        var at=mArg.attachments;
+                        var ad=mArg.defaults;
+                        function dcomplete(data,at)
+                        {
+                            //isdrag 默认 0 播放 2 暂停 3 播完 4
+                            $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag=4&view=pc&enc={10}&rt=&dtype=Audio&_t={11}",ad.reportUrl,data.dtoken,ad.clazzId,data.duration+1,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,(data.duration+1)*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),getnow()),function(data,success)
+                            {
+                                console.log(data);
+                                if(data.isPassed)alert("已完成！");
+                            })
+                        }
+                        for(var i3=0;i3<at.length;i3++)
+                        {
+                            if(at[i3].property.objectid==objectid)break;
+                        }
+                        if(i3<at.length)at=at[i3]; else at=null;
+                        console.log(at);
                         $.getJSON(cxsturl+objectid,function(data,success)
                         {
                             console.log(data);
+                            if(true)
+                            {
+                                (function(a,b){dcompleteb.addEventListener('click',function(){dcomplete(a,b)})})(data,at);
+                                d2.append(dcompleteb);
+                            }
                             if(data['download']!=undefined)
                             {
                                 (function(d){downloadaudiob.addEventListener('click',function(){downloadaudio(d)})})(data.download);
