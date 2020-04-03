@@ -567,7 +567,7 @@ function fuck()
                                 (function(d){downloadaudio.addEventListener('click',function(){downloadvideo(d)})})(data.mp3);
                                 div2.append(downloadaudio);
                             }
-                            $.getJSON("https://mooc1-2.chaoxing.com/richvideo/subtitle",{'mid':mid,'_dc':getnow()},function(data,success)
+                            $.getJSON(window.location.href.match(/(https:\/\/){0,}(http:\/\/){0,}[^\/]+/)[0]+"/richvideo/subtitle",{'mid':mid,'_dc':getnow()},function(data,success)
                             {
                                 if(data.length)
                                 {
@@ -2049,7 +2049,7 @@ function fuck()
                             if(txt)
                             {
                                 textarea.value=bo.innerText;
-                                textarea.style.lineHeight="6px";
+                                textarea.style.lineHeight="12px";
                             }
                             else
                             {
@@ -2084,7 +2084,7 @@ function fuck()
                             div2s.value=div2o2.value;
                             txt=true;
                             textarea.value=bo.innerText;
-                            textarea.style.lineHeight="6px";
+                            textarea.style.lineHeight="12px";
                         }
                     }
                 }
@@ -2121,7 +2121,7 @@ function fuck()
             }
             for(var i=0;i<vff.length;i++)
             {
-                if(vff[i].src.match(/^https:\/\/mooc1-2.chaoxing.com\/ananas\/modules\/work\/index.html/))
+                if(vff[i].src.match(/^https:\/\/mooc1-[0-9]+.chaoxing.com\/ananas\/modules\/work\/index.html/))
                 {
                     (function(vfi){fuckhomework(vfi);})(vff[i]);
                 }

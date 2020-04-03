@@ -94,7 +94,7 @@ function fuckhomework()
                 if(txt)
                 {
                     textarea.value=bo.innerText;
-                    textarea.style.lineHeight="6px";
+                    textarea.style.lineHeight="12px";
                 }
                 else
                 {
@@ -127,7 +127,7 @@ function fuckhomework()
                 div2s.value=div2o2.value;
                 txt=true;
                 textarea.value=bo.innerText;
-                textarea.style.lineHeight="6px";
+                textarea.style.lineHeight="12px";
             }
         }
     }
