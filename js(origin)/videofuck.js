@@ -2,6 +2,15 @@ console.log('videofuck.js');
 (function(){
 /**@type {HTMLCollectionOf<HTMLIFrameElement>} */
 var vf=null;
+/**@type {string} 空的document*/
+var nulld="<html><head></head><body></body></html>";
+/**判断document是否为空的
+ * @param {Document} d
+ * @returns {boolean} true 非空 false 空的*/
+function isnulld(d)
+{
+    return d.documentElement.outerHTML!=nulld&&d.body!=null&&d.head!=null;
+}
 /**@constant {string} 超星学习通数据*/
 var cxsturl=window.location.href.match(/(https:\/\/){0,}(http:\/\/){0,}[^\/]+/)[0]+"/ananas/status/";
 function fuck()
@@ -40,10 +49,11 @@ function fuck()
             function getfuckvfd()
             {
                 var temp=vf.contentDocument;
-                if(temp!=null)
+                if(temp!=null&&isnulld(temp))
                 {
-                    vfd=vf.contentDocument;
-                    getfuckmArg(vfd)
+                    vfd=temp;
+                    console.log(vfd);
+                    getfuckmArg(vfd);
                 }
                 else setTimeout(getfuckvfd,1000);
             }
@@ -78,7 +88,7 @@ function fuck()
                 function getvd()
                 {
                     var vdd=vfi.contentDocument;
-                    if(vdd!=null)
+                    if(vdd!=null&&isnulld(vdd))
                     {
                         vd=vdd;
                         console.log(vd);
@@ -833,7 +843,7 @@ function fuck()
                 function getvd()
                 {
                     var vd2=vfi.contentDocument;
-                    if(vd2!=null)
+                    if(vd2!=null&&isnulld(vd2))
                     {
                         vd=vd2;
                         console.log(vd);
@@ -1144,7 +1154,7 @@ function fuck()
                 function getvd()
                 {
                     var d2=vfi.contentDocument;
-                    if(d2!=null)
+                    if(d2!=null&&isnulld(d2))
                     {
                         vd=d2;
                         console.log(vd);
@@ -1490,7 +1500,7 @@ function fuck()
                 function getvd()
                 {
                     var vv=vfi.contentDocument;
-                    if(vv!=null)
+                    if(vv!=null&&isnulld(vv))
                     {
                         vd=vv;
                         console.log(vd);
@@ -1700,7 +1710,7 @@ function fuck()
                 function getvd()
                 {
                     var vd2=vfi.contentDocument;
-                    if(vd2!=null)
+                    if(vd2!=null&&isnulld(vd2))
                     {
                         vd=vd2;
                         console.log(vd)
@@ -1912,7 +1922,7 @@ function fuck()
                 function getvd()
                 {
                     var vd2=vfi.contentDocument;
-                    if(vd2!=null)
+                    if(vd2!=null&&isnulld(vd2))
                     {
                         vd=vd2;
                         console.log(vd);
@@ -1948,7 +1958,7 @@ function fuck()
                 function getvd2()
                 {
                     var vd=vfii.contentDocument;
-                    if(vd!=null)
+                    if(vd!=null&&isnulld(vd))
                     {
                         vd2=vd;
                         console.log(vd2);
@@ -1980,7 +1990,7 @@ function fuck()
                     function getvd3()
                     {
                         var vd=vfiii.contentDocument;
-                        if(vd!=null)
+                        if(vd!=null&&isnulld(vd))
                         {
                             vd3=vd;
                             console.log(vd3);
