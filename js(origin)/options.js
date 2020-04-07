@@ -27,6 +27,8 @@ function set(setting=settings)
     d.getElementById('zhsant').value=setting.zhsant;
     d.getElementById('sva').value=setting.sva;
     d.getElementById('svc').value=setting.svc;
+    d.getElementById('huo').value=setting.huo;
+    d.getElementById('fuo').value=setting.fuo;
 }
 function get()
 {chrome.storage.sync.get(function(data)
@@ -69,7 +71,11 @@ function save()
     qd.zhsant=d.getElementById('zhsant').value=="true";
     qd.sva=d.getElementById('sva').value=="true";
     qd.svc=d.getElementById('svc').value=="true";
-    chrome.storage.sync.set(qd);
+    qd.huo=d.getElementById('huo').value=="true";
+    qd.fuo=d.getElementById('fuo').value=="true";
+    chrome.storage.sync.set(qd,function(){
+        alert('保存成功！');
+    });
 }
 d.addEventListener('DOMContentLoaded',function(){
     d.getElementById('a').addEventListener('click',get);

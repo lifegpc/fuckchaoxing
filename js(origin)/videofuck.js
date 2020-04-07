@@ -127,21 +127,22 @@ function fuck()
                 function thendo()
                 {
                     if(v.hasAttribute('fucked'))return;
-                    var p=v.parentElement.parentElement;
+                    var p2=v.parentElement.parentElement;
+                    var p=p2.parentElement;
                     var h=vfi.clientHeight;
                     for(var i=0;i<p.childElementCount;i++)
                     {
-                        if(v.parentElement==p.children[i])break;
+                        if(p2==p.children[i])break;
                     }
                     i++;
                     function getdiv()
                     {
                         var d=vd.createElement('div');
+                        d.className="id2";
                         var st=vd.createElement('style');
                         /**@type {number} 插件控制面板高度*/
                         var ch=100;
-                        st.innerText=".id{display:inline-block;}";
-                        d.append(st);
+                        st.innerText=".id{display:inline-block;}.id2{font-size:12px;color:red;}";
                         /**添加 | */
                         function addfg()
                         {
@@ -188,6 +189,56 @@ function fuck()
                         d.append(div);
                         var div2=vd.createElement('div');
                         div2.style.display='none';
+                        div2.className="id2";
+                        var ndiv=vd.createElement('div');
+                        ndiv.style.display="none";
+                        var odiv=vd.createElement('div');
+                        /**@type {HTMLDivElement} 自建H5播放器外部div*/
+                        var hdiv=vd.createElement('div');
+                        /**@type {HTMLDivElement}*/
+                        var nhdiv=vd.getElementById('reader');
+                        hdiv.style.display="none";
+                        /**@type {boolean} 是否有自建H5播放器*/
+                        var oh5=false;
+                        /**@type {Function} 返回自建播放器时调整高度*/
+                        var rh;
+                        /**@type {boolean} 不展开面板却替换时用*/
+                        var ffirst=false;
+                        div2.append(ndiv);
+                        div2.append(odiv);
+                        var sownh5videob=vd.createElement('button');
+                        sownh5videob.innerText="使用自建H5播放器替代";
+                        function changef()
+                        {
+                            var i=div.getAttribute('i')-1+1;
+                            var i2=div3.getAttribute('i')-1+1;
+                            if(i)vfi.style.height=h+ch+"px";
+                            else if(i2)vfi.style.height=h+20+"px";
+                            else vfi.style.height=h+75+"px";
+                        }
+                        function sownh5video(data,data2,at,rt)
+                        {
+                            odiv.style.display="none";
+                            nhdiv.style.display="none";
+                            if(!oh5)
+                            {
+                                rh=ownh5video(vfi,vd,ndiv,odiv,hdiv,nhdiv,data,data2,at,rt,h,function(va){h=va;changef();},ch,function(va){ch=va;changef();},false);
+                                oh5=true;
+                                if(ffirst)
+                                {
+                                    openhideconsole(vfi,div,div2,div3);
+                                    ffirst=false;
+                                }
+                            }
+                            else
+                            {
+                                ndiv.style.display=null;
+                                hdiv.style.display=null;
+                                rh();
+                            }
+                        }
+                        sownh5videob.style.display="none";
+                        odiv.append(sownh5videob);
                         var bscontrolbutton=vd.createElement('button');
                         bscontrolbutton.innerText="显示浏览器控制条";
                         bscontrolbutton.setAttribute('i',0);
@@ -213,7 +264,7 @@ function fuck()
                             }
                         }
                         bscontrolbutton.addEventListener('click',function(e){showhidecontrol(e.srcElement)});
-                        div2.append(bscontrolbutton);
+                        odiv.append(bscontrolbutton);
                         var xxtcontrolbutton=vd.createElement('button');
                         xxtcontrolbutton.innerText="隐藏学习通视频控制条";
                         xxtcontrolbutton.setAttribute('i',1);
@@ -245,7 +296,7 @@ function fuck()
                             }
                         }
                         xxtcontrolbutton.addEventListener('click',function(e){showhidexxtcontrol(e.srcElement)});
-                        div2.append(xxtcontrolbutton);
+                        odiv.append(xxtcontrolbutton);
                         var zmsettingsbutton=vd.createElement('button');
                         var zmsettingsmbc=vd.getElementsByClassName('vjs-modal-dialog vjs-hidden  vjs-text-track-settings');
                         if(zmsettingsmbc.length)
@@ -282,9 +333,9 @@ function fuck()
                             zmsettingsmb.style.display="none";
                             zmsettingsmb.style.position="relative";
                             zmsettingsmb.style.background="#000000AA";
-                            div2.append(zmsettingsbutton);
+                            odiv.append(zmsettingsbutton);
                         }
-                        div2.append(vd.createElement('br'));
+                        odiv.append(vd.createElement('br'));
                         var autoplaybutton=vd.createElement('button');
                         autoplaybutton.innerText="视频暂停后自动继续播放";
                         autoplaybutton.setAttribute('i',0);
@@ -317,7 +368,7 @@ function fuck()
                         }
                         if(settings!=null&&settings.vpautoplay)autoplay(v,autoplaybutton);
                         autoplaybutton.addEventListener('click',function(e){autoplay(v,e.srcElement)});
-                        div2.append(autoplaybutton);
+                        odiv.append(autoplaybutton);
                         var popquestionc1=vd.getElementsByClassName('x-container ans-timelineobjects x-container-default');
                         var popquestionc2=vd.getElementsByClassName('x-component ans-timelineobjectsbg x-component-default');
                         if(popquestionc1.length&&popquestionc2.length)
@@ -356,7 +407,7 @@ function fuck()
                                 }
                             }
                             (function(div1,div2){popquestionbutton1.addEventListener('click',function(e){showhidepopquestion(div1,div2,e.srcElement)})})(popquestion1,popquestion2);
-                            div2.append(popquestionbutton1);
+                            odiv.append(popquestionbutton1);
                             var popquestiondiv=vd.createElement('div');
                             var popquestionbutton2=vd.createElement('button');
                             popquestiondiv.className="id";
@@ -402,12 +453,12 @@ function fuck()
                                 }
                             }
                             (function(divo){popquestionbutton2.addEventListener('click',function(){showanswer(divo)})})(popquestiondivo);
-                            div2.append(popquestiondiv);
+                            odiv.append(popquestiondiv);
                         }
-                        div2.append(vd.createElement('br'));
+                        odiv.append(vd.createElement('br'));
                         var pbspeeddiv=vd.createElement('div');
                         pbspeeddiv.className="id";
-                        div2.append(pbspeeddiv);
+                        odiv.append(pbspeeddiv);
                         var pbspeedlabel=vd.createElement('div');
                         pbspeedlabel.className="id";
                         pbspeedlabel.innerText="播放速度调整：";
@@ -474,7 +525,6 @@ function fuck()
                             }
                         }
                         pbspeedlockbutton.addEventListener('click',function(e){lockrate(e.srcElement)});
-                        div2.append(vd.createElement('br'));
                         var dcompleteb=vd.createElement('button');
                         dcompleteb.innerText="直接完成视频";
                         var downloadvideob=vd.createElement('button');
@@ -541,6 +591,7 @@ function fuck()
                         $.getJSON(cxsturl+objectid,function(data,success){
                             console.log(data);
                             var have=false;
+                            var have2=false;
                             if(at.isPassed==undefined)
                             {
                                 have=true;
@@ -556,18 +607,21 @@ function fuck()
                             if(data['httpmd']!=undefined)
                             {
                                 have=true;
+                                have2=true;
                                 (function(d){downloadvideobm.addEventListener('click',function(){downloadvideo(d)})})(data.httpmd);
                                 div2.append(downloadvideobm);
                             }
                             if(data['http']!=undefined)
                             {
                                 have=true;
+                                have2=true;
                                 (function(d){downloadvideobs.addEventListener('click',function(){downloadvideo(d)})})(data.http);
                                 div2.append(downloadvideobs);
                             }
                             if(data['httphd']!=undefined)
                             {
                                 have=true;
+                                have2=true;
                                 (function(d){downloadvideobh.addEventListener('click',function(){downloadvideo(d)})})(data.httphd);
                                 div2.append(downloadvideobh);
                             }
@@ -577,11 +631,11 @@ function fuck()
                                 (function(d){downloadaudio.addEventListener('click',function(){downloadvideo(d)})})(data.mp3);
                                 div2.append(downloadaudio);
                             }
-                            $.getJSON(window.location.href.match(/(https:\/\/){0,}(http:\/\/){0,}[^\/]+/)[0]+"/richvideo/subtitle",{'mid':mid,'_dc':getnow()},function(data,success)
+                            $.getJSON(window.location.href.match(/(https:\/\/){0,}(http:\/\/){0,}[^\/]+/)[0]+"/richvideo/subtitle",{'mid':mid,'_dc':getnow()},function(data2,success)
                             {
-                                if(data.length)
+                                if(data2.length)
                                 {
-                                    console.log(data);
+                                    console.log(data2);
                                     if(have)
                                     {
                                         div2.append(vd.createElement('br'));
@@ -598,9 +652,9 @@ function fuck()
                                         downloadsubs.append(option);
                                         if(data.selected)downloadsubs.value=data.url;
                                     }
-                                    for(var i=0;i<data.length;i++)
+                                    for(var i=0;i<data2.length;i++)
                                     {
-                                        createoption(data[i]);
+                                        createoption(data2[i]);
                                     }
                                     downloadsubb.addEventListener('click',function(){downloadsub(downloadsubs)});
                                 }
@@ -611,6 +665,20 @@ function fuck()
                                 if(ch!=100&&settings!=null&&settings.showvc&&div.getAttribute('i')=="1")
                                 {
                                     vfi.style.height=h+ch+"px";
+                                }
+                                if(have2)
+                                {
+                                    (function(data,data2,at,rt){sownh5videob.addEventListener('click',function(){sownh5video(data,data2,at,rt);})})(data,data2,at,rt);
+                                    sownh5videob.style.display=null;
+                                    if(settings!=null&&settings.huo)
+                                    {
+                                        if(!settings.showvc)
+                                        {
+                                            openhideconsole(vfi,div,div2,div3);
+                                            ffirst=true;
+                                        }
+                                        sownh5videob.click()
+                                    }
                                 }
                             })
                         });
@@ -649,18 +717,20 @@ function fuck()
                                 {
                                     dm.style.display=null;
                                     src.innerText="隐藏弹幕行";
-                                    vfi.style.height=h+60+"px";
+                                    vfi.style.height=h+75+"px";
                                     if(!b)seta(0);
                                 }
                             }
                         }
-                        vfi.style.height=h+60+"px";
+                        vfi.style.height=h+75+"px";
                         if(settings!=null&&settings.hidedm)showhidedm(vfi,div3,div);
                         if(settings!=null&&settings.showvc)openhideconsole(vfi,div,div2,div3);
                         div3.addEventListener('click',function(e){showhidedm(vfi,e.srcElement,div)});
                         div.addEventListener('click',function(e){openhideconsole(vfi,e.srcElement,div2,div3)});
                         var nnode=null;
                         if(i!=p.childElementCount)nnode=p.children[i];
+                        p.insertBefore(hdiv,nnode);
+                        p.insertBefore(st,nnode);
                         p.insertBefore(d,nnode);
                         p.insertBefore(div2,nnode);
                     }
@@ -673,6 +743,7 @@ function fuck()
                     vf.setAttribute('fucked',1);
                     var p=vf.parentElement.parentElement;
                     var h=vfi.clientHeight;
+                    var ch=-20;
                     for(var i=0;i<p.childElementCount;i++)
                     {
                         if(p.children[i]==vf.parentElement)break;
@@ -720,7 +791,7 @@ function fuck()
                             divl1.innerText="隐藏视频插件控制面板";
                             div2.style.display=null;
                             if(i2)showhidedm(true);
-                            vfi.style.height=h-20+"px";
+                            vfi.style.height=h+ch+"px";
                             divl1.setAttribute('i',1);
                         }
                     }
@@ -752,6 +823,53 @@ function fuck()
                     var div2=vd.createElement('div');
                     div2.className="id2";
                     div2.style.display="none";
+                    var odiv=vd.createElement('div');
+                    var ndiv=vd.createElement('div');
+                    ndiv.style.display="none";
+                    var hdiv=vd.createElement('div');
+                    /**@type {HTMLDivElement}*/
+                    var nhdiv=vd.getElementById('reader');
+                    /**@type {boolean}*/
+                    var oh5=false;
+                    /**@type {Function}*/
+                    var rh;
+                    var ffirst=false;
+                    hdiv.style.display="none";
+                    div2.append(ndiv);
+                    div2.append(odiv);
+                    var sownh5videob=vd.createElement('button');
+                    sownh5videob.innerText="使用自建H5播放器替代";
+                    sownh5videob.style.display="none";
+                    function changef()
+                    {
+                        var i=divl1.getAttribute('i')-1+1;
+                        var i2=divl2.getAttribute('i')-1+1;
+                        if(i)vfi.style.height=h+ch+"px";
+                        else if(i2)vfi.style.height=h+10+"px";
+                        else vfi.style.height=h-40+"px";
+                    }
+                    function sownh5video(data,data2,at,rt)
+                    {
+                        odiv.style.display="none";
+                        nhdiv.style.display="none";
+                        if(!oh5)
+                        {
+                            rh=ownh5video(vfi,vd,ndiv,odiv,hdiv,nhdiv,data,data2,at,rt,h,function(va){h=va;changef();},ch,function(va){ch=va;changef();},true);
+                            oh5=true;
+                            if(ffirst)
+                            {
+                                showhidevcotrols();
+                                ffirst=false;
+                            }
+                        }
+                        else
+                        {
+                            ndiv.style.display=null;
+                            hdiv.style.display=null;
+                            rh();
+                        }
+                    }
+                    odiv.append(sownh5videob);
                     var dcompleteb=vd.createElement('button');
                     dcompleteb.innerText="直接完成视频";
                     var downloadvb=vd.createElement('button');
@@ -767,7 +885,9 @@ function fuck()
                         window.open(url,'_blank');
                     }
                     var objectid=vfi.getAttribute('objectid');
+                    var mid=vfi.getAttribute('mid');
                     console.log(objectid);
+                    console.log(mid);
                     var at=mArg.attachments;
                     var ad=mArg.defaults;
                     var dd=vfi.getAttribute('data');
@@ -798,6 +918,7 @@ function fuck()
                     $.getJSON(cxsturl+objectid,function(data,success)
                     {
                         console.log(data);
+                        var have2=false;
                         if(at.isPassed==undefined)
                         {
                             (function(a,b,c){dcompleteb.addEventListener('click',function(){dcomplete(a,b,c)})})(data,at,rt);
@@ -810,22 +931,45 @@ function fuck()
                         }
                         if(data.httpmd!=undefined)
                         {
+                            have2=true;
                             (function(d){downloadvbm.addEventListener('click',function(){download(d)})})(data.httpmd);
                             div2.append(downloadvbm);
                         }
                         if(data.http!=undefined)
                         {
+                            have2=true;
                             (function(d){downloadvbs.addEventListener('click',function(){download(d)})})(data.http);
                             div2.append(downloadvbs);
                         }
                         if(data.httphd!=undefined)
                         {
+                            have2=true;
                             (function(d){downloadvbh.addEventListener('click',function(){download(d)})})(data.httphd);
                             div2.append(downloadvbh);
                         }
+                        $.getJSON(window.location.href.match(/(https:\/\/){0,}(http:\/\/){0,}[^\/]+/)[0]+"/richvideo/subtitle",{'mid':mid,'_dc':getnow()},function(data2,success)
+                        {
+                            if(have2)
+                            {
+                                (function(data,data2,at,rt){sownh5videob.addEventListener('click',function(){sownh5video(data,data2,at,rt);})})(data,data2,at,rt);
+                                sownh5videob.style.display=null;
+                                ch=0;
+                                vfi.style.height=h+ch+"px";
+                                if(settings!=null&&settings.fuo)
+                                {
+                                    if(!settings.showvc)
+                                    {
+                                        showhidevcotrols();
+                                        ffirst=true;
+                                    }
+                                    sownh5videob.click();
+                                }
+                            }
+                        });
                     });
                     var node=null;
                     if(i!=p.childElementCount)node=p.children[i];
+                    p.insertBefore(hdiv,node);
                     p.insertBefore(st,node);
                     p.insertBefore(div,node);
                     p.insertBefore(div2,node);
@@ -833,6 +977,313 @@ function fuck()
                     if(settings!=null&&settings.hidedm)showhidedm();
                     if(settings!=null&&settings.showvc)showhidevcotrols();
                 }
+            }
+            /**@param {HTMLIFrameElement} vfi
+             * @param {Document} vd
+             * @param {HTMLDivElement} ndiv 新的video控制div
+             * @param {HTMLDivElement} odiv 旧的video控制div
+             * @param {HTMLDivElement} hdiv 新的video div
+             * @param {HTMLDivElement} nhdiv 旧的video div
+             * @param data api返回信息
+             * @param {Array} data2 字幕信息
+             * @param at 视频信息
+             * @param rt api中的rt
+             * @param {number} h vfi原始高度
+             * @param {Function} hf 改变h的函数
+             * @param {number} ch 插件叠加高度
+             * @param {Function} chf 改变ch的函数
+             * @param {boolean} iff false 原H5播放器 true 原Flash播放器
+            */
+            function ownh5video(vfi,vd,ndiv,odiv,hdiv,nhdiv,data,data2,at,rt,h,hf,ch,chf,iff)
+            {
+                /**@type {boolean} 是否正在播放*/
+                var isplay=false;
+                var oh=h;
+                var och=ch;
+                var nh=h;
+                var first=true;
+                /**@type {number}*/
+                var nch;
+                if(iff)nch=och+40;else nch=och-15;
+                nhdiv.style.display=null;
+                hdiv.style.height=nhdiv.clientHeight+"px";
+                hdiv.style.width=nhdiv.clientWidth+"px";
+                nhdiv.style.display="none";
+                var v=vd.createElement('video');
+                /**@type {Array<{n:string,s:string,o:HTMLOptionElement}>} 图质列表（从高到低）*/
+                var sl=[];
+                if(data.httphd!=undefined)sl.push({n:'超清',s:data.httphd,o:vd.createElement('option')});
+                if(data.http!=undefined)sl.push({n:"标清",s:data.http,o:vd.createElement('option')});
+                if(data.httpmd!=undefined)sl.push({n:"极速",s:data.httpmd,o:vd.createElement('option')});
+                console.log(sl);
+                v.src=sl[0].s;
+                v.controls=true;
+                v.style.width="100%";
+                v.style.height="auto";
+                var ad=mArg.defaults;
+                /**@param {0|2|3|4} drag 默认 0 播放 2 暂停 3 播完 4
+                 * @param {number} time 当前时间（秒
+                */
+                function sendup(drag,time)
+                {
+                    $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag={10}&view=pc&enc={11}&rt={12}&dtype=Video&_t={13}",ad.reportUrl,data.dtoken,ad.clazzId,time,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,drag,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,time*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),rt,getnow()),function(data,success){
+                        if(data.isPassed)lco.innerText="已完成！";
+                    })
+                }
+                var rob=vd.createElement('button');
+                rob.innerText="切回原始播放器";
+                rob.addEventListener('click',function(){
+                    if(isplay)v.pause();
+                    hdiv.style.display="none";
+                    ndiv.style.display="none";
+                    nhdiv.style.display=null;
+                    odiv.style.display=null;
+                    hf(oh);
+                    chf(och);
+                })
+                ndiv.append(rob);
+                var tzd=vd.createElement('div');
+                tzd.className="id";
+                ndiv.append(tzd);
+                var tzl=vd.createElement('div');
+                tzl.innerText="选择画质：";
+                tzl.className="id";
+                tzd.append(tzl);
+                var tzs=vd.createElement('select');
+                for(var i=0;i<sl.length;i++)
+                {
+                    var tzo=sl[i].o;
+                    tzo.innerText=sl[i].n;
+                    tzo.value=i;
+                    tzs.append(tzo);
+                }
+                tzs.value=0;
+                tzd.append(tzs);
+                tzs.addEventListener('change',function(){
+                    var isp=isplay;
+                    var nw=v.currentTime;
+                    v.src=sl[tzs.value].s;
+                    function jt()
+                    {
+                        v.currentTime=nw;
+                        v.removeEventListener('loadedmetadata',jt);
+                        if(isp)v.addEventListener('canplay',jt2);
+                    }
+                    function jt2()
+                    {
+                        v.play();
+                        v.removeEventListener('canplay',jt2);
+                    }
+                    v.addEventListener('loadedmetadata',jt);
+                });
+                var lco=vd.createElement('div');
+                lco.className="id";
+                ndiv.append(lco);
+                var speedd=vd.createElement('div');
+                ndiv.append(speedd);
+                var speedl=vd.createElement('div');
+                speedl.innerText="播放速度调整：";
+                speedl.className="id";
+                speedd.append(speedl);
+                var speedi=vd.createElement('input');
+                speedi.style.width="40px";
+                speedi.value=v.playbackRate;
+                speedi.className="id";
+                speedd.append(speedi);
+                var speedb=vd.createElement('button');
+                speedb.innerText="调整播放速度";
+                speedd.append(speedb);
+                var speedo=vd.createElement('div');
+                speedo.className="id";
+                speedd.append(speedo);
+                v.addEventListener('ratechange',function()
+                {
+                    speedi.value=v.playbackRate;
+                });
+                speedb.addEventListener('click',function(){
+                    try
+                    {
+                        var speed=speedi.value-1+1;
+                        v.playbackRate=speed;
+                        speedo.innerText="速度已调整为"+speed;
+                    }
+                    catch(e)
+                    {
+                        speedo.innerText=e.message;
+                    }
+                })
+                /**@type {Array<{n:string,s:string}>} */
+                var zl=[];
+                for(var i=0;i<data2.length;i++)
+                {
+                    var temp=data2[i];
+                    var temp2=temp.url.match(/support\/(\w+).\w+/);
+                    if(temp2)
+                    {
+                        zl.push({n:temp.name,s:"https://cs-ans.chaoxing.com/support/sub/"+temp2[1]+".vtt"});
+                    }
+                }
+                console.log(zl);
+                for(var i=0;i<zl.length;i++)
+                {
+                    var temp3=vd.createElement('track');
+                    temp3.kind="subtitles";
+                    temp3.label=zl[i].n;
+                    if(i==0)temp3.default=true;
+                    (function(t,u){
+                        function re()
+                        {
+                            var xhr=new XMLHttpRequest();
+                            xhr.open('GET',u,true);
+                            xhr.responseType="blob";
+                            xhr.onload=function()
+                            {
+                                if(this.status==200||this.status==304)
+                                {
+                                    var reader = new FileReader();
+                                    reader.readAsDataURL(this.response);
+                                    reader.onload=function(e)
+                                    {
+                                        var temp=null;
+                                        if(e.target.result.length>0)temp=e.target.result.split(',');
+                                        if(e.target.result.length>0&&temp[1]!=undefined&&temp[1].length>0)
+                                        {
+                                            t.src="data:text/vtt;base64,"+temp[1];
+                                            v.append(t);
+                                        }
+                                        else setTimeout(re,1000);
+                                    }
+                                }
+                                else setTimeout(re,1000);
+                            }
+                            xhr.send();
+                        }
+                        re();
+                    })(temp3,zl[i].s);
+                }
+                hdiv.append(v);
+                hdiv.style.display=null;
+                ndiv.style.display=null;
+                function changepos()
+                {
+                    if(iff)nh=v.clientHeight+75;else nh=v.clientHeight;
+                    hdiv.style.height=v.clientHeight+"px";
+                    hf(nh);
+                }
+                var ct=0;
+                var cpip=HTMLVideoElement.prototype.requestPictureInPicture!=undefined;
+                /**@param {number} ln 上次提交的时间*/
+                var ln=null;
+                v.addEventListener('loadedmetadata',changepos);
+                v.addEventListener('playing',function(){isplay=true;});
+                v.addEventListener('pause',function(){
+                    isplay=false;
+                    ct=v.currentTime;
+                    ln=null;
+                    if(ct!=v.duration)sendup(3,Math.round(ct));
+                    else sendup(4,v.duration+1);
+                });
+                v.addEventListener('keydown',function(e){
+                    function dt(t)
+                    {
+                        var nt=ct-t;
+                        if(nt<0)v.currentTime=0;
+                        else v.currentTime=nt;
+                    }
+                    function ft(t)
+                    {
+                        var nt=ct+t;
+                        if(nt>v.duration)v.currentTime=v.duration;
+                        else v.currentTime=nt;
+                    }
+                    function crt(f)
+                    {
+                        var sp=Math.round((v.playbackRate+f)*1E8)/1E8;
+                        try
+                        {
+                            v.playbackRate=sp;
+                        }
+                        catch(e){}
+                    }
+                    if(e.key.toLocaleLowerCase()=='f')
+                    {
+                        if(vd.fullscreen)vd.exitFullscreen();
+                        else if(vd.fullscreenEnabled)v.requestFullscreen();
+                    }
+                    else if(e.key.toLocaleLowerCase()=='p'&&cpip)
+                    {
+                        v.requestPictureInPicture();
+                    }
+                    else if(e.key=="ArrowLeft"&&!e.ctrlKey)dt(5);
+                    else if(e.key=="ArrowRight"&&!e.ctrlKey)ft(5);
+                    else if(e.key=="ArrowLeft"&&e.ctrlKey)dt(60);
+                    else if(e.key=="ArrowRight"&&e.ctrlKey)ft(60);
+                    else if(e.key=="ArrowUp"&&e.ctrlKey)crt(0.1);
+                    else if(e.key=="ArrowDown"&&e.ctrlKey)crt(-0.1);
+                    else if(e.key.toLocaleLowerCase()=="w")
+                    {
+                        var bt=-1;
+                        var temp=v.textTracks;
+                        if(temp.length==0)return;
+                        for(var i=0;i<temp.length;i++)
+                        {
+                            if(temp[i].mode=="showing")
+                            {
+                                bt=i;
+                                break;
+                            }
+                        }
+                        if(bt>-1)temp[bt].mode="hidden";
+                        else temp[0].mode="showing";
+                    }
+                    else if(e.key.toLocaleLowerCase()=="s")
+                    {
+                        var bt=-1;
+                        var temp=v.textTracks;
+                        if(temp.length==0)return;
+                        for(var i=0;i<temp.length;i++)
+                        {
+                            if(temp[i].mode=="showing")
+                            {
+                                bt=i;
+                                break;
+                            }
+                        }
+                        temp[bt].mode="hidden";
+                        bt++;
+                        if(bt==temp.length)bt=0;
+                        temp[bt].mode="showing";
+                    }
+                });
+                v.addEventListener('timeupdate',function()
+                {
+                    ct=v.currentTime;
+                    if(ln==null)return;
+                    if(getnow()-ln>=60000)
+                    {
+                        sendup(0,Math.round(ct));
+                        ln=getnow();
+                    }
+                })
+                v.addEventListener('play',function()
+                {
+                    if(first)
+                    {
+                        sendup(0,Math.round(ct));
+                        first=false;
+                    }
+                    else
+                    {
+                        sendup(2,Math.round(ct));
+                    }
+                    ln=getnow();
+                })
+                chf(nch);
+                function ret(){
+                    hf(nh);
+                    chf(nch);
+                }
+                return ret;
             }
             /**@param {HTMLIFrameElement} vfi*/
             function fuckaudio(vfi)
