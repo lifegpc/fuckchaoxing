@@ -233,6 +233,7 @@ function fuckcourse()
             var speed2=Math.round(scrolli2.value-1+1);
             if(isNaN(speed2)){scrollo.innerText="每秒钟滚动次数不是数字";return;}
             if(speed2<1||speed2>100){scrollo.innerText="每秒钟滚动次数应是1-100间的整数";return;}
+            if(speed2>speed){scrollo.innerText="每秒钟滚动次数大于自动滚动速度会导致无法滚动";return;}
             scrollb.setAttribute('i',1);
             scrollb.innerText="停止自动滚动";
             var s=speed/speed2;

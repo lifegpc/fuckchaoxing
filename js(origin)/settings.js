@@ -284,6 +284,7 @@ function scheck(settings,callback,o=0)
                 getnews();
                 v8();
             }
+            if(!comv(sv,[1,0,23]))equalnow();
         }
     }
     if(need)

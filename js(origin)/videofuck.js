@@ -46,6 +46,8 @@ function fuck()
             if(first==1)(function(vf){setTimeout(function(){cz(vf)},1000);})(vf);
             /**@type {Document}*/
             var vfd=null;
+            /**@type {string} 章节ID*/
+            var chapterid=null;
             function getfuckvfd()
             {
                 var temp=vf.contentDocument;
@@ -53,6 +55,8 @@ function fuck()
                 {
                     vfd=temp;
                     console.log(vfd);
+                    chapterid=vf.src.match(/knowledgeid=([0-9]+)/)[1];
+                    console.log(chapterid);
                     getfuckmArg(vfd);
                 }
                 else setTimeout(getfuckvfd,1000);
@@ -75,11 +79,29 @@ function fuck()
             /**@param {Document} vfd*/
             function getfuckmArg(vfd)
             {
-                var s=vfd.body.outerHTML.match(/mArg = {[^;]+;/)[0];
-                console.log(s);
-                eval(s);
-                console.log(mArg);
-                getfuckiframe(vfd);
+                var s=vfd.body.outerHTML.match(/mArg = {[^;]+;/);
+                if(s!=null)
+                {
+                    console.log(s[0]);
+                    eval(s[0]);
+                    console.log(mArg);
+                    getfuckct(vfd);
+                }
+                else setTimeout(function(){getfuckvfd(vfd)},1000);
+            }
+            /**@type {HTMLDivElement} 目录树*/
+            var ct=null;
+            /**@param {Document} vfd*/
+            function getfuckct(vfd)
+            {
+                var temp=document.getElementById('coursetree');
+                if(temp!=null)
+                {
+                    ct=temp;
+                    console.log(ct);
+                    getfuckiframe(vfd);
+                }
+                else setTimeout(function(){getfuckct(vfd)},1000);
             }
             /**@param {HTMLIFrameElement} vfi*/
             function fuckvideo(vfi)
@@ -127,6 +149,8 @@ function fuck()
                 function thendo()
                 {
                     if(v.hasAttribute('fucked'))return;
+                    /**@type {HTMLDivElement} 任务点div*/
+                    var rwdp=vfi.parentElement;
                     var p2=v.parentElement.parentElement;
                     var p=p2.parentElement;
                     var h=vfi.clientHeight;
@@ -222,7 +246,7 @@ function fuck()
                             nhdiv.style.display="none";
                             if(!oh5)
                             {
-                                rh=ownh5video(vfi,vd,ndiv,odiv,hdiv,nhdiv,data,data2,at,rt,h,function(va){h=va;changef();},ch,function(va){ch=va;changef();},false);
+                                rh=ownh5video(vfi,vd,ndiv,odiv,hdiv,nhdiv,data,data2,at,rt,h,function(va){h=va;changef();},ch,function(va){ch=va;changef();},false,rwdp);
                                 oh5=true;
                                 if(ffirst)
                                 {
@@ -569,7 +593,16 @@ function fuck()
                             $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag=4&view=pc&enc={10}&rt={11}&dtype=Video&_t={12}",ad.reportUrl,data.dtoken,ad.clazzId,data.duration+1,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,(data.duration+1)*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),rt,getnow()),function(data,success)
                             {
                                 console.log(data);
-                                if(data.isPassed)alert("已完成！");
+                                if(data.isPassed)
+                                {
+                                    alert("已完成！");
+                                    rwdp.className="ans-attach-ct ans-job-finished";
+                                    $.get("studentstudycourselist",{courseId:ad.courseid,chapterId:chapterid,clazzid:ad.clazzId},function(data2,success)
+                                    {
+                                        ct.innerHTML=data2;
+                                        showallchapter();
+                                    });
+                                }
                             })
                         }
                         for(var i3=0;i3<at.length;i3++)
@@ -741,6 +774,8 @@ function fuck()
                 {
                     if(vf.hasAttribute('fucked'))return;
                     vf.setAttribute('fucked',1);
+                    /**@type {HTMLDivElement} 任务点div*/
+                    var rwdp=vfi.parentElement;
                     var p=vf.parentElement.parentElement;
                     var h=vfi.clientHeight;
                     var ch=-20;
@@ -854,7 +889,7 @@ function fuck()
                         nhdiv.style.display="none";
                         if(!oh5)
                         {
-                            rh=ownh5video(vfi,vd,ndiv,odiv,hdiv,nhdiv,data,data2,at,rt,h,function(va){h=va;changef();},ch,function(va){ch=va;changef();},true);
+                            rh=ownh5video(vfi,vd,ndiv,odiv,hdiv,nhdiv,data,data2,at,rt,h,function(va){h=va;changef();},ch,function(va){ch=va;changef();},true,rwdp);
                             oh5=true;
                             if(ffirst)
                             {
@@ -906,7 +941,16 @@ function fuck()
                         $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag=4&view=pc&enc={10}&rt={11}&dtype=Video&_t={12}",ad.reportUrl,data.dtoken,ad.clazzId,data.duration+1,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,(data.duration+1)*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),rt,getnow()),function(data,success)
                         {
                             console.log(data);
-                            if(data.isPassed)alert("已完成！");
+                            if(data.isPassed)
+                            {
+                                alert("已完成！");
+                                rwdp.className="ans-attach-ct ans-job-finished";
+                                $.get("studentstudycourselist",{courseId:ad.courseid,chapterId:chapterid,clazzid:ad.clazzId},function(data2,success)
+                                {
+                                    ct.innerHTML=data2;
+                                    showallchapter();
+                                });
+                            }
                         })
                     }
                     for(var i3=0;i3<at.length;i3++)
@@ -993,8 +1037,9 @@ function fuck()
              * @param {number} ch 插件叠加高度
              * @param {Function} chf 改变ch的函数
              * @param {boolean} iff false 原H5播放器 true 原Flash播放器
+             * @param {HTMLDivElement} rwdp 任务点div
             */
-            function ownh5video(vfi,vd,ndiv,odiv,hdiv,nhdiv,data,data2,at,rt,h,hf,ch,chf,iff)
+            function ownh5video(vfi,vd,ndiv,odiv,hdiv,nhdiv,data,data2,at,rt,h,hf,ch,chf,iff,rwdp)
             {
                 /**@type {boolean} 是否正在播放*/
                 var isplay=false;
@@ -1016,6 +1061,7 @@ function fuck()
                 if(data.http!=undefined)sl.push({n:"标清",s:data.http,o:vd.createElement('option')});
                 if(data.httpmd!=undefined)sl.push({n:"极速",s:data.httpmd,o:vd.createElement('option')});
                 console.log(sl);
+                v.preload="metadata";
                 v.src=sl[0].s;
                 v.controls=true;
                 v.style.width="100%";
@@ -1027,7 +1073,16 @@ function fuck()
                 function sendup(drag,time)
                 {
                     $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag={10}&view=pc&enc={11}&rt={12}&dtype=Video&_t={13}",ad.reportUrl,data.dtoken,ad.clazzId,time,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,drag,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,time*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),rt,getnow()),function(data,success){
-                        if(data.isPassed)lco.innerText="已完成！";
+                        if(data.isPassed)
+                        {
+                            lco.innerText="已完成！";
+                            rwdp.className="ans-attach-ct ans-job-finished";
+                            $.get("studentstudycourselist",{courseId:ad.courseid,chapterId:chapterid,clazzid:ad.clazzId},function(data2,success)
+                            {
+                                ct.innerHTML=data2;
+                                showallchapter();
+                            });
+                        }
                     })
                 }
                 var rob=vd.createElement('button');
@@ -1059,7 +1114,7 @@ function fuck()
                 }
                 tzs.value=0;
                 tzd.append(tzs);
-                tzs.addEventListener('change',function(){
+                function tzschange(){
                     var isp=isplay;
                     var nw=v.currentTime;
                     v.src=sl[tzs.value].s;
@@ -1075,7 +1130,8 @@ function fuck()
                         v.removeEventListener('canplay',jt2);
                     }
                     v.addEventListener('loadedmetadata',jt);
-                });
+                }
+                tzs.addEventListener('change',tzschange);
                 var lco=vd.createElement('div');
                 lco.className="id";
                 ndiv.append(lco);
@@ -1141,14 +1197,14 @@ function fuck()
                                 if(this.status==200||this.status==304)
                                 {
                                     var reader = new FileReader();
-                                    reader.readAsDataURL(this.response);
+                                    reader.readAsText(this.response);
                                     reader.onload=function(e)
                                     {
-                                        var temp=null;
-                                        if(e.target.result.length>0)temp=e.target.result.split(',');
-                                        if(e.target.result.length>0&&temp[1]!=undefined&&temp[1].length>0)
+                                        
+                                        if(e.target.result.length>0)
                                         {
-                                            t.src="data:text/vtt;base64,"+temp[1];
+                                            var b=new Blob([e.target.result],{type:'text/vtt'});
+                                            t.src=URL.createObjectURL(b);
                                             v.append(t);
                                         }
                                         else setTimeout(re,1000);
@@ -1181,7 +1237,7 @@ function fuck()
                     ct=v.currentTime;
                     ln=null;
                     if(ct!=v.duration)sendup(3,Math.round(ct));
-                    else sendup(4,v.duration+1);
+                    else sendup(4,data.duration+1);
                 });
                 v.addEventListener('keydown',function(e){
                     function dt(t)
@@ -1205,22 +1261,31 @@ function fuck()
                         }
                         catch(e){}
                     }
-                    if(e.key.toLocaleLowerCase()=='f')
+                    if(e.key.toLocaleLowerCase()=='f'&&!e.ctrlKey&&!e.shiftKey&&!e.altKey)
                     {
                         if(vd.fullscreen)vd.exitFullscreen();
                         else if(vd.fullscreenEnabled)v.requestFullscreen();
                     }
-                    else if(e.key.toLocaleLowerCase()=='p'&&cpip)
+                    else if(e.key.toLocaleLowerCase()=='p'&&cpip&&!e.ctrlKey&&!e.shiftKey&&!e.altKey)
                     {
-                        v.requestPictureInPicture();
+                        if(!vd.pictureInPictureElement)
+                        {
+                            v.requestPictureInPicture();
+                        }
+                        else
+                        {
+                            vd.exitPictureInPicture();
+                        }
                     }
-                    else if(e.key=="ArrowLeft"&&!e.ctrlKey)dt(5);
-                    else if(e.key=="ArrowRight"&&!e.ctrlKey)ft(5);
-                    else if(e.key=="ArrowLeft"&&e.ctrlKey)dt(60);
-                    else if(e.key=="ArrowRight"&&e.ctrlKey)ft(60);
-                    else if(e.key=="ArrowUp"&&e.ctrlKey)crt(0.1);
-                    else if(e.key=="ArrowDown"&&e.ctrlKey)crt(-0.1);
-                    else if(e.key.toLocaleLowerCase()=="w")
+                    else if(e.key=="ArrowLeft"&&!e.ctrlKey&&!e.shiftKey&&!e.altKey)dt(5);
+                    else if(e.key=="ArrowRight"&&!e.ctrlKey&&!e.shiftKey&&!e.altKey)ft(5);
+                    else if(e.key=="ArrowLeft"&&!e.ctrlKey&&e.shiftKey&&!e.altKey)dt(15);
+                    else if(e.key=="ArrowRight"&&!e.ctrlKey&&e.shiftKey&&!e.altKey)ft(15);
+                    else if(e.key=="ArrowLeft"&&e.ctrlKey&&!e.shiftKey&&!e.altKey)dt(60);
+                    else if(e.key=="ArrowRight"&&e.ctrlKey&&!e.shiftKey&&!e.altKey)ft(60);
+                    else if(e.key=="ArrowUp"&&e.ctrlKey&&!e.shiftKey&&!e.altKey)crt(0.1);
+                    else if(e.key=="ArrowDown"&&e.ctrlKey&&!e.shiftKey&&!e.altKey)crt(-0.1);
+                    else if(e.key.toLocaleLowerCase()=="w"&&!e.ctrlKey&&!e.shiftKey&&!e.altKey)
                     {
                         var bt=-1;
                         var temp=v.textTracks;
@@ -1236,7 +1301,7 @@ function fuck()
                         if(bt>-1)temp[bt].mode="hidden";
                         else temp[0].mode="showing";
                     }
-                    else if(e.key.toLocaleLowerCase()=="s")
+                    else if(e.key.toLocaleLowerCase()=="s"&&!e.ctrlKey&&!e.shiftKey&&!e.altKey)
                     {
                         var bt=-1;
                         var temp=v.textTracks;
@@ -1253,6 +1318,16 @@ function fuck()
                         bt++;
                         if(bt==temp.length)bt=0;
                         temp[bt].mode="showing";
+                    }
+                    else if(e.key.toLocaleLowerCase()=="v"&&!e.ctrlKey&&!e.shiftKey&&!e.altKey)
+                    {
+                        var s=tzs.value-1+1;
+                        if(s<sl.length-1)tzs.value=s+1; else tzs.value=0;
+                        tzschange();
+                    }
+                    else if(e.key.toLocaleLowerCase()=="r"&&!e.ctrlKey&&e.shiftKey&&!e.altKey)
+                    {
+                        try{v.playbackRate=1}catch(e){}
                     }
                 });
                 v.addEventListener('timeupdate',function()
@@ -1893,6 +1968,7 @@ function fuck()
                                 var speed2=Math.round(bookscrolli2.value-1+1);
                                 if(isNaN(speed2)){bookscrollo.innerText="每秒钟滚动次数不是数字";return;}
                                 if(speed2<1||speed2>100){bookscrollo.innerText="每秒钟滚动次数应是1-100间的整数";return;}
+                                if(speed2>speed){bookscrollo.innerText="每秒钟滚动次数大于自动滚动速度会导致无法滚动";return;}
                                 bookscrollb.disabled=true;
                                 //发出自动滚动请求
                                 chrome.runtime.sendMessage({action:"bookautoscroll",bi:bookinfo,f:bookscrolls.value,s:speed,j:speed2});
@@ -2107,6 +2183,7 @@ function fuck()
                             var speed2=Math.round(imgscolli2.value-1+1);
                             if(isNaN(speed2)){imgscollo.innerText="每秒钟滚动次数不是数字";return;}
                             if(speed2<1||speed2>100){imgscollo.innerText="每秒钟滚动次数应是1-100间的整数";return;}
+                            if(speed2>speed){imgscollo.innerText="每秒钟滚动次数大于自动滚动速度会导致无法滚动";return;}
                             src.setAttribute('i',1);
                             src.innerText="停止自动滚动";
                             var s=speed/speed2;
@@ -2313,6 +2390,7 @@ function fuck()
                             var speed2=Math.round(imgscolli2.value-1+1);
                             if(isNaN(speed2)){imgscollo.innerText="每秒钟滚动次数不是数字";return;}
                             if(speed2<1||speed2>100){imgscollo.innerText="每秒钟滚动次数应是1-100间的整数";return;}
+                            if(speed2>speed){imgscollo.innerText="每秒钟滚动次数大于自动滚动速度会导致无法滚动";return;}
                             src.setAttribute('i',1);
                             src.innerText="停止自动滚动";
                             var s=speed/speed2;
@@ -2683,6 +2761,16 @@ function extformat(format,...inp)
         need=format.match(/{[0-9]+}/);
     }
     return format
+}
+/**@param i 已重复次数*/
+function showallchapter(i=0)
+{
+    var s=document.getElementsByClassName('knowledgeOpenBtn knowledgeCloseBtnImg');
+    if(s.length)
+    {
+        for(var i2=0;i2<s.length;i2++)s[i2].className="knowledgeOpenBtn knowledgeOpenBtnImg knowledgeOpenCurBtnImg";
+    }
+    else if(i<5)(function(i){setTimeout(function(){showallchapter(i+1)},1000)})(i);
 }
 })();
 var mArg=null;

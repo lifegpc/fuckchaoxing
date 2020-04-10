@@ -30,14 +30,18 @@ function fuckbook()
     function getbookinfo()
     {
         var b=document.getElementById('bookinfo');
+        if(b!=null){
         var temp=b.innerText;
         var t2=temp.split(",");
         bookinfo.a=t2[0];
         bookinfo.bn=t2[1];
         bookinfo.p=t2[2];
         bookinfo.pd=t2[3];
+        then();
+        } else setTimeout(getbookinfo,1000);
     }
     getbookinfo();
+    function then(){
     Readweb=document.getElementById('Readweb');
     pagejump=document.getElementById('pagejump');
     console.log(bookinfo);
@@ -229,6 +233,7 @@ function fuckbook()
             }
         });
     });
+}
 }
 if(self!=top)
 {fuckbook();}
