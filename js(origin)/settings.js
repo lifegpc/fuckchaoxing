@@ -76,6 +76,7 @@ function scheck(settings,callback,o=0)
         news.svc=false;
         news.huo=false;
         news.fuo=false;
+        news.not=false;
     }
     if(o==1)
     {
@@ -158,6 +159,7 @@ function scheck(settings,callback,o=0)
             isn('svc','Boolean',false);
             isn('huo','Boolean',false);
             isn('fuo','Boolean',false);
+            isn('not','Boolean',false);
         }
         if(r==-1)
         {
@@ -236,6 +238,12 @@ function scheck(settings,callback,o=0)
                 isn2('sva','Boolean',settings);
                 isn2('svc','Boolean',settings);
             }
+            function v9()
+            {
+                v8();
+                isn2('huo','Boolean',settings);
+                isn2('fuo','Boolean',settings);
+            }
             if(comv(sv,[1,0,4])==1&&comv(sv,[1,0,8])==-1)
             {
                 need=true;
@@ -284,7 +292,12 @@ function scheck(settings,callback,o=0)
                 getnews();
                 v8();
             }
-            if(!comv(sv,[1,0,23]))equalnow();
+            if(comv(sv,[1,0,22])==1&&comv(sv,[1,1,0])==-1)
+            {
+                need=true;
+                getnews();
+                v9();
+            }
         }
     }
     if(need)
