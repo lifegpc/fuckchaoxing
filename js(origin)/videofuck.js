@@ -13,6 +13,8 @@ function isnulld(d)
 }
 /**@constant {string} 超星学习通数据*/
 var cxsturl=window.location.href.match(/(https:\/\/){0,}(http:\/\/){0,}[^\/]+/)[0]+"/ananas/status/";
+/**@type {MutationObserver} ppt pdf img dom监视器*/
+var imgmb;
 function fuck()
 {
     var a=document.getElementsByTagName('iframe');
@@ -36,6 +38,11 @@ function fuck()
                 }
                 if(!f)
                 {
+                    if(imgmb!=null)
+                    {
+                        imgmb.disconnect();
+                        imgmb=null;
+                    }
                     setTimeout(function(){fuck();},3000);
                 }
                 else
@@ -2437,6 +2444,27 @@ function fuck()
                     p.insertBefore(div2,node);
                     vfi.style.height=h+40+"px";
                     if(settings!=null&&settings.showppt)showhidepptcontrols();
+                    imgmb=mbo(function(mutations,observe)
+                    {
+                        mutations.forEach(function(value,i,a)
+                        {
+                            if(value.type=="attributes")
+                            {
+                                var atn=value.attributeName;
+                                if(atn=="style")
+                                {
+                                    if(img.style.display=="none")
+                                    {
+                                        imgscolld.style.display="none";
+                                    }
+                                    else if(img.style.display==null||img.style.display=="")
+                                    {
+                                        imgscolld.style.display=null;
+                                    }
+                                }
+                            }
+                        });
+                    },img,{attributes:true})
                 }
             }
             /**@param {HTMLIFrameElement} vfi*/
@@ -2777,6 +2805,18 @@ function showallchapter(i=0)
         for(var i2=0;i2<s.length;i2++)s[i2].className="knowledgeOpenBtn knowledgeOpenBtnImg knowledgeOpenCurBtnImg";
     }
     else if(i<5)(function(i){setTimeout(function(){showallchapter(i+1)},1000)})(i);
+}
+/**检测元素变化通知 
+ * @param {MutationCallback} callback 反馈方法
+ * @param {Node} target 目标元素
+ * @param {MutationObserverInit} config 设置
+ * @returns {MutationObserver}
+*/
+function mbo(callback,target,config)
+{
+    var mb=new MutationObserver(callback);
+    mb.observe(target,config);
+    return mb;
 }
 })();
 var mArg=null;
