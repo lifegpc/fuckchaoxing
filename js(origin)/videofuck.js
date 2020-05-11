@@ -1401,6 +1401,8 @@ function fuck()
                     if(a.hasAttribute('fucked'))return;
                     var p=a.parentElement.parentElement;
                     var h=vfi.clientHeight;
+                    /**父级div 用于标识是否已完成*/
+                    var rwdp=vfi.parentElement;
                     for(var i=0;i<p.childElementCount;i++)
                     {
                         if(a.parentElement==p.children[i])break;
@@ -1627,7 +1629,11 @@ function fuck()
                             $.getJSON(extformat("{0}/{1}?clazzId={2}&playingTime={3}&duration={4}&clipTime=0_{5}&objectId={6}&otherInfo={7}&jobid={8}&userid={9}&isdrag=4&view=pc&enc={10}&rt=&dtype=Audio&_t={11}",ad.reportUrl,data.dtoken,ad.clazzId,data.duration+1,data.duration,data.duration,data.objectid,at.otherInfo,at.property.jobid,ad.userid,md5(extformat("[{0}][{1}][{2}][{3}][{4}][{5}][{6}][0_{7}]",ad.clazzId,ad.userid,at.property.jobid,data.objectid,(data.duration+1)*1000,"d_yHJ!$pdA~5",data.duration*1000,data.duration)),getnow()),function(data,success)
                             {
                                 console.log(data);
-                                if(data.isPassed)alert("已完成！");
+                                if(data.isPassed)
+                                {
+                                    rwdp.className="ans-attach-ct ans-job-finished";
+                                    alert("已完成！");
+                                }
                             })
                         }
                         for(var i3=0;i3<at.length;i3++)
