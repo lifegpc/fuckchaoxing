@@ -1057,7 +1057,7 @@ function fuck()
                 var v=vd.createElement('video');
                 /**@type {Array<{n:string,s:string,o:HTMLOptionElement}>} 图质列表（从高到低）*/
                 var sl=[];
-                if(data.httphd!=undefined)sl.push({n:'超清',s:data.httphd,o:vd.createElement('option')});
+                if(data.httphd!=undefined)sl.push({n:'高清',s:data.httphd,o:vd.createElement('option')});
                 if(data.http!=undefined)sl.push({n:"标清",s:data.http,o:vd.createElement('option')});
                 if(data.httpmd!=undefined)sl.push({n:"极速",s:data.httpmd,o:vd.createElement('option')});
                 console.log(sl);
