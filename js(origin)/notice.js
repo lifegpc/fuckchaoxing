@@ -17,6 +17,41 @@ var kci=null;
 /**@type {Array<number>} 已通知活动列表*/
 var tcl=[];
 var tcq={};
+/**保存内容至localstorage
+ * @param data 要保存的内容
+ * @param {string} name 变量名
+ * @param {()=>void} f 回调函数
+*/
+function storageset(data,name,f=null)
+{
+    chrome.storage.local.get(function(obj)
+    {
+        obj[name]=data;
+        if(f)chrome.storage.local.set(obj,f);
+        else chrome.storage.local.set(obj);
+    })
+}
+/**从localstorage获取内容
+ * @param {string} name 变量名
+ * @param d 初始化数据（如果不存在时返回这个并设置为这个）
+ * @param {(data)=>void} f 回调函数
+*/
+function storageget(name,d,f)
+{
+    chrome.storage.local.get(function(obj)
+    {
+        if(obj[name])
+        {
+            f(obj[name]);
+        }
+        else
+        {
+            obj[name]=d;
+            chrome.storage.local.set(obj);
+            f(d);
+        }
+    })
+}
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse)
 {
     if(message.action=="startnotice")//设置启用
@@ -71,7 +106,11 @@ function swork()
         var vf=doc.getElementById('frame_content');
         uri=vf.src;
         host=uri.match(/([^:]+:\/\/)?[^\/]+/)[0];
-        nw();
+        storageget('tcl',[],function(data)
+        {
+            tcl=data;
+            nw();
+        })
     })
 }
 function nw()
@@ -259,6 +298,8 @@ function parsehd(d,f)
                 {
                     tcq[iid]={cid:acid,uri:uri}
                     tcl.push(acid);
+                    while(tcl.length>1000)tcl.shift();
+                    storageset(tcl,'tcl');
                 })
                 f();
             })
