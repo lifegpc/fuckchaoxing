@@ -16,6 +16,7 @@ var courselist;
 var kci=null;
 /**@type {Array<number>} 已通知活动列表*/
 var tcl=[];
+var tcq={};
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse)
 {
     if(message.action=="startnotice")//设置启用
@@ -32,6 +33,11 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse)
             {
                 clearTimeout(kil);
                 kil=null;
+            }
+            if(kci!=null)
+            {
+                clearTimeout(kci);
+                kci=null;
             }
             work=false;
         }
@@ -251,6 +257,7 @@ function parsehd(d,f)
                     message:detail
                 },function(iid)
                 {
+                    tcq[iid]={cid:acid,uri:uri}
                     tcl.push(acid);
                 })
                 f();
@@ -630,4 +637,12 @@ function getpagelist(d,f)
         }
     }
 }
+chrome.notifications.onClicked.addListener(function(id)
+{
+    var q=tcq[id];
+    if(q)
+    {
+        chrome.tabs.create({url:q.uri});
+    }
+})
 })();
