@@ -29,6 +29,7 @@ function set(setting=settings)
     d.getElementById('svc').value=setting.svc;
     d.getElementById('huo').value=setting.huo;
     d.getElementById('fuo').value=setting.fuo;
+    d.getElementById('not').value=setting.not;
 }
 function get()
 {chrome.storage.sync.get(function(data)
@@ -73,6 +74,15 @@ function save()
     qd.svc=d.getElementById('svc').value=="true";
     qd.huo=d.getElementById('huo').value=="true";
     qd.fuo=d.getElementById('fuo').value=="true";
+    qd.not=d.getElementById('not').value=="true";
+    if(qd.not)
+    {
+        chrome.runtime.sendMessage({action:"startnotice"});
+    }
+    else
+    {
+        chrome.runtime.sendMessage({action:"stopnotice"});
+    }
     chrome.storage.sync.set(qd,function(){
         alert('保存成功！');
     });
@@ -81,5 +91,23 @@ d.addEventListener('DOMContentLoaded',function(){
     d.getElementById('a').addEventListener('click',get);
     d.getElementById('c').addEventListener('click',clear);
     d.getElementById('s').addEventListener('click',save);
+    ad();
 });
+/**越过不能访问本地资源的限制*/
+function ad()
+{
+    var ac=document.getElementsByTagName('a');
+    for(var i=0;i<ac.length;i++)
+    {
+        var t=ac[i];
+        if(t.hasAttribute('data'))
+        {
+            t.addEventListener('click',function(e)
+            {
+                chrome.runtime.sendMessage({action:"openuri",uri:e.srcElement.getAttribute('data')});
+            });
+            t.href="javascript:;";
+        }
+    }
+}
 })();

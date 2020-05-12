@@ -16,6 +16,12 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse)
         var temp=url.split('/');
         return temp[temp.length-1];
     }
+    if(message.action=="openuri")
+    {
+        chrome.tabs.create({url:message.uri,active:true});
+        sendResponse(1);
+        return;
+    }
     if(message.action=="getzm")
     {
         $.get(message.url,function(data,success)
