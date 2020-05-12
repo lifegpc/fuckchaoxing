@@ -126,7 +126,6 @@ function checkhd(i,f)
     {
         var p=new DOMParser();
         var doc=p.parseFromString(d,"text/html");
-        console.log(doc);
         parsehd(doc,f);
     })
 }
@@ -145,7 +144,7 @@ function parsehd(d,f)
     var fid;
     function getlistdiv()
     {
-        var te=d.getElementById('endList');//正常状态为startList，DEBUG时可修改为endList
+        var te=d.getElementById('startList');//正常状态为startList，DEBUG时可修改为endList
         if(te!=null)
         {
             listdiv=te;
@@ -189,7 +188,6 @@ function parsehd(d,f)
                 }
             }
         }
-        console.log(hdlist);
         if(hdlist.length)
         {
             phdi(0,f);
@@ -220,7 +218,6 @@ function parsehd(d,f)
      */
     function phd(i,f)
     {
-        console.log(i);
         var s=i.getAttribute('onclick');
         var s2=s.match(/\(([0-9]+),([0-9]+),([^\)]+)\)/);
         if(s2!=null)
@@ -246,10 +243,17 @@ function parsehd(d,f)
                     f();
                     return;
                 }
-                console.log(uri);
                 [title,detail]=gethdinfo(i);
-                console.log(title);
-                console.log(detail);
+                chrome.notifications.create({
+                    type:"basic",
+                    iconUrl:"ico/128.png",
+                    title:title,
+                    message:detail
+                },function(iid)
+                {
+                    tcl.push(acid);
+                })
+                f();
             })
         }
         else//解析失败，跳过解析
