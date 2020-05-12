@@ -642,7 +642,11 @@ chrome.notifications.onClicked.addListener(function(id)
     var q=tcq[id];
     if(q)
     {
-        chrome.tabs.create({url:q.uri});
+        chrome.windows.getAll(function(windows)
+        {
+            if(windows.length)chrome.tabs.create({url:q.uri});
+            else chrome.windows.create({url:q.uri})
+        })
     }
 })
 })();

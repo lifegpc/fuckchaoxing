@@ -298,6 +298,7 @@ function scheck(settings,callback,o=0)
                 getnews();
                 v9();
             }
+            if(!comv(sv,[1,1,0]))equalnow();
         }
     }
     if(need)
