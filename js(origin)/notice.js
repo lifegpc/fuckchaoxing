@@ -7,11 +7,15 @@ var work=false;
 /**@type {string} 课程列表uri*/
 var uri;
 /**@type {number} 课程列表定时器ID*/
-var kil;
+var kil=null;
 var host;
 var deb;
 /**@type {Array<CourseInfo>} 课程列表*/
 var courselist;
+/**@type {number} 检测活动列表定时器*/
+var kci=null;
+/**@type {Array<number>} 已通知活动列表*/
+var tcl=[];
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse)
 {
     if(message.action=="startnotice")//设置启用
@@ -66,6 +70,11 @@ function swork()
 }
 function nw()
 {
+    if(kci!=null)//如果有活动列表检测定时任务将删除。
+    {
+        clearTimeout(kci);
+        kci=null;
+    }
     $.get(uri,function(d,s)
     {
         var p=new DOMParser;
@@ -76,9 +85,337 @@ function nw()
         getpagelist(doc,function(l)
         {
             courselist=l;
+            dsrw();
         });
         kil=setTimeout(nw,600000);//10分钟
     })
+}
+/**活动列表定时检测*/
+function dsrw()
+{
+    if(courselist.length)
+    {
+        checkhdi(0,function()
+        {
+            kci=setTimeout(dsrw,60000)//1分钟
+        });
+    }
+}
+/**检测活动
+ * @param {number} i 课程在courselist的索引
+ * @param {()=>void} f 回调函数（全部完成时回调）
+*/
+function checkhdi(i,f)
+{
+    if(i<courselist.length)
+    {
+        (function(i){checkhd(courselist[i-1],function(){checkhdi(i,f);})})(i+1);
+    }
+    else
+    {
+        f();
+    }
+}
+/**检测活动列表
+ * @param {CourseInfo} i 课程信息
+ * @param {()=>void} f 回调函数
+*/
+function checkhd(i,f)
+{
+    $.get("https://mobilelearn.chaoxing.com/widget/pcpick/stu/index",{courseId:i.cid,jclassId:i.jid},function(d,s)
+    {
+        var p=new DOMParser();
+        var doc=p.parseFromString(d,"text/html");
+        console.log(doc);
+        parsehd(doc,f);
+    })
+}
+/**解析doc档案
+ * @param {Document} d
+ * @param {()=>void} f 回调函数
+ */
+function parsehd(d,f)
+{
+    var hdlist=[];
+    /**@type {HTMLDivElement} 活动列表，startlist为正在进行中*/
+    var listdiv;
+    var courseId;
+    var classId;
+    var puid;
+    var fid;
+    function getlistdiv()
+    {
+        var te=d.getElementById('endList');//正常状态为startList，DEBUG时可修改为endList
+        if(te!=null)
+        {
+            listdiv=te;
+            getinfo()
+        }
+        else setTimeout(getlistdiv,1000);
+    }
+    function getinfo()
+    {
+        /**@type {HTMLInputElement}*/
+        var t=d.getElementById('puid');
+        /**@type {HTMLInputElement}*/
+        var t2=d.getElementById('courseId');
+        /**@type {HTMLInputElement}*/
+        var t3=d.getElementById('classId');
+        /**@type {HTMLInputElement}*/
+        var t4=d.getElementById('fid');
+        if(t!=null&&t2!=null&&t3!=null&&t4!=null)
+        {
+            puid=t.value;
+            courseId=t2.value;
+            classId=t3.value;
+            fid=t4.value;
+            gethdlist();
+        }
+        else setTimeout(getinfo,1000);
+    }
+    function gethdlist()
+    {
+        for(var i=0;i<listdiv.childElementCount;i++)
+        {
+            /**@type {HTMLDivElement}*/
+            var te=listdiv.children[i];
+            if(te.childElementCount)
+            {
+                /**@type {HTMLDivElement}*/
+                var te2=te.children[0];
+                if(te2.className=="Mct")
+                {
+                    hdlist.push(te2);
+                }
+            }
+        }
+        console.log(hdlist);
+        if(hdlist.length)
+        {
+            phdi(0,f);
+        }
+        else//没有活动，调用回调函数
+        {
+            f();
+        }
+    }
+    /**解析活动
+     * @param {number} i 活动在hdlist中的索引
+     * @param {()=>void} f 全部完成后的回调函数
+    */
+    function phdi(i,f)
+    {
+        if(i<hdlist.length)
+        {
+            (function(i){phd(hdlist[i],function(){phdi(i+1,f)})})(i);
+        }
+        else//全部解析完成后回调
+        {
+            f();
+        }
+    }
+    /**解析活动
+     * @param {HTMLDivElement} i 活动div
+     * @param {()=>void} f 回调函数
+     */
+    function phd(i,f)
+    {
+        console.log(i);
+        var s=i.getAttribute('onclick');
+        var s2=s.match(/\(([0-9]+),([0-9]+),([^\)]+)\)/);
+        if(s2!=null)
+        {
+            var acid=s2[1]-1+1;
+            if(isintcl(acid))//已通知，跳过解析
+            {
+                f();
+                return;
+            }
+            var apt=s2[2]-1+1;
+            /**@type {string}*/
+            var uri;
+            /**@type {string}*/
+            var title;
+            /**@type {string}*/
+            var detail;
+            activeDetail(acid,apt,function(url)
+            {
+                uri=url;
+                if(uri=="")//解析失败，跳过解析
+                {
+                    f();
+                    return;
+                }
+                console.log(uri);
+                [title,detail]=gethdinfo(i);
+                console.log(title);
+                console.log(detail);
+            })
+        }
+        else//解析失败，跳过解析
+        {
+            f();
+        }
+    }
+    /**模拟学习通activeDetail
+     * @param {number} activeId
+     * @param {number} appType
+     * @param {(url:string)=>void} f 回调函数
+    */
+    function activeDetail(activeId,appType,f)
+    {
+        var url="";
+        var host2="https://mobilelearn.chaoxing.com";
+        if(appType==11)
+        {
+            url=host2+"/widget/pick/pc/startPick?activeId="+activeId+"&classId="+classId+"&fid="+fid+"&courseId="+courseId;
+        }
+        if(appType==2)
+        {
+            url=host2+"/widget/sign/pcStuSignController/preSign?activeId="+activeId+"&classId="+classId+"&fid="+fid+"&courseId="+courseId;
+        }
+        if(appType==4)
+        {
+            url=host2+"/widget/pcAnswer/teaAnswer?activeId="+activeId+"&classId="+classId+"&fid="+fid+"&courseId="+courseId;
+        }
+        if(appType==14||appType==42)
+        {
+            url=host2+"/widget/pcvote/goStudentVotePage?activeId="+activeId+"&classId="+classId+"&fid="+fid+"&courseId="+courseId+"&quessequence=1";
+        }
+        if(appType==43)
+        {
+            url=host2+"/page/qvote/stu/answerQvote?activeId="+activeId+"&classId="+classId+"&fid="+fid+"&courseId="+courseId;
+        }
+        if(appType==23)
+        {
+            url=host2+"/widget/score/pc/queryScore?activeId="+activeId+"&classId="+classId+"&fid="+fid+"&courseId="+courseId;
+        }
+        if(appType==35)
+        {
+            $.ajax({
+                url:host2+"/v2/apis/taskStu/getActiveInfoForMe",
+                type:"post",
+                dataType:"json",
+			    async:'false',
+                data: {"courseId":courseId,"fid":fid,"activeId":activeId},
+                success: function(obj)
+                {
+                    var isNorm = obj.data.isNorm;
+					var toAnswerPage =obj.data.toAnswerPage;
+					var notInClass = obj.data.notInClass;
+                    var useNoteEditor = obj.data.useNoteEditor;
+                    if(notInClass==1)
+                    {
+                        f("");
+                        return;
+                    }
+                    var url="";
+					if(isNorm==1){//分组的
+						if(useNoteEditor==1){
+							if(toAnswerPage==1){
+								url = 'https://mobilelearn.chaoxing.com/page/renwuNew/stu/taskDetailStuForAnswer_new?activeId='+activeId+'&courseId='+courseId+"&classId="+classId+"&fid="+fid+"&returnType=3";
+							}else{
+								url='https://mobilelearn.chaoxing.com/page/renwuNew/stu/taskDetailStuAndAnsDetail_new?courseId='+courseId+'&classId='+classId+'&activeId='+activeId+'&fid='+fid+"&returnType=3";
+							}
+						}else{
+							if(toAnswerPage==1){
+								url = 'https://mobilelearn.chaoxing.com/page/renwu/stu/taskDetailStuForAnswer?activeId='+activeId+'&courseId='+courseId+"&classId="+classId+"&fid="+fid+"&returnType=3";
+							}else{
+								url='https://mobilelearn.chaoxing.com/page/renwu/stu/taskDetailStuAndAnsDetail?courseId='+courseId+'&classId='+classId+'&activeId='+activeId+'&fid='+fid+"&returnType=3";
+							}
+						}
+					}else{
+						if(useNoteEditor==1){
+							if(toAnswerPage==1){
+								url='https://mobilelearn.chaoxing.com/page/renwuNew/notGroup/taskDetailStuForAnswerNotGroup_new?courseId='+courseId+'&classId='+classId+'&activeId='+activeId+'&fid='+fid+"&returnType=3"
+							}else{
+								url='https://mobilelearn.chaoxing.com/page/renwuNew/notGroup/taskDetailStuAndAnsDetailNotGroup_new?courseId='+courseId+'&classId='+classId+'&activeId='+activeId+'&fid='+fid+"&returnType=3"
+							}
+						}else{
+							if(toAnswerPage==1){
+								url='https://mobilelearn.chaoxing.com/page/renwu/notGroup/taskDetailStuForAnswerNotGroup?courseId='+courseId+'&classId='+classId+'&activeId='+activeId+'&fid='+fid+"&returnType=3"
+							}else{
+								url='https://mobilelearn.chaoxing.com/page/renwu/notGroup/taskDetailStuAndAnsDetailNotGroup?courseId='+courseId+'&classId='+classId+'&activeId='+activeId+'&fid='+fid+"&returnType=3"
+							}
+                        }
+                    }
+                    f(url);
+                },
+                error:function()
+                {
+                    f("");
+                }
+            });
+        }
+        else if(appType==5)
+        {
+            $.ajax({
+                url:host2+"/v2/apis/discuss/getTopicDiscussInfo",
+                dataType:"json",
+                async:'false',
+                data: {"activeId":activeId},
+                success:function(data){
+                    if (data.result == 1) {
+                        url = "https://groupyd.chaoxing.com/pc/course/topicDiscuss/info?uuid=" + data.data.uuid+"&activeId=" + data.data.activeId + "&startTime=" + data.data.startTime + "&timeLong=" + data.data.timeLong+ "&activeStatus=" + data.data.activeStatus + "&courseId=" + courseId;
+                        f(url);
+                    }
+                    else f("");
+                },
+                error:function()
+                {
+                    f("");
+                }
+            });
+        }
+        else
+        {
+            f(url);
+        }
+    }
+    /**获得活动详细信息
+     * @param {HTMLDivElement} i 活动div
+     * @returns {[string,string]} 分别为标题和详细信息
+     */
+    function gethdinfo(i)
+    {
+        var title="活动";
+        var t=i.children[0];
+        if(t)
+        {
+            t=t.children[0];
+            if(t)
+            {
+                t=t.children[1];
+                if(t&&t.tagName=="DD")
+                {
+                    title=t.innerHTML;
+                }
+            }
+        }
+        var detail="详细信息";
+        t=i.children[1];
+        if(t)
+        {
+            t=t.children[0];
+            if(t&&t.tagName=="A")
+            {
+                detail=t.innerHTML;
+            }
+        }
+        return [title,detail];
+    }
+    /**是否已经已通知
+     * @param a 活动id
+    */
+    function isintcl(a)
+    {
+        for(var i=0;i<tcl.length;i++)
+        {
+            if(tcl[i]==a)return true;
+        }
+        return false;
+    }
+    getlistdiv();
 }
 function getnow()
 {
