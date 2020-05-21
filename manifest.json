@@ -44,7 +44,7 @@
         "css":["css/videoalone.css"]
     },
     {
-        "matches":["https://www.zjooc.cn/ucenter/student/course/study/*/test/do/*/*","http://www.zjooc.cn/ucenter/student/course/study/*/test/do/*/*"],
+        "matches":["https://www.zjooc.cn/ucenter/student/course/study/*/test/do/*/*","http://www.zjooc.cn/ucenter/student/course/study/*/test/do/*/*","https://www.zjooc.cn/ucenter/student/course/study/*/homework/do/*","http://www.zjooc.cn/ucenter/student/course/study/*/homework/do/*"],
         "js":["jso/md5.min.js","jso/clipboard.min.js","js/zjooctest.js"]
     }],
     "options_page":"options.html",

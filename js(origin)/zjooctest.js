@@ -71,7 +71,7 @@ window.addEventListener('load',()=>
         bu.className="btn";
         var tq="tr"+md5(fl.innerText+getnow+fz.innerText);
         var tr=document.createElement('textarea');
-        var s=fl.innerText.split('\n')[0]+'\n';
+        var s=fl.innerText.split('\n')[0];
         var te=q.children[1];
         if(te.childElementCount>0)
         {
@@ -90,7 +90,7 @@ window.addEventListener('load',()=>
                 {
                     if(ql[ij]!="")ss+=ql[ij];
                 }
-                s+=(ss+"\n");
+                s+=("\n"+ss);
             }
         }
         tr.style.width="1px";
