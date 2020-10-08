@@ -298,7 +298,7 @@ function scheck(settings,callback,o=0)
                 getnews();
                 v9();
             }
-            if(!comv(sv,[1,1,0])||!comv(sv,[1,1,1]))equalnow();
+            if(!comv(sv,[1,1,0])||(comv(sv,[1,1,0])==1&&comv(sv,[1,1,4]==-1)))equalnow();
         }
     }
     if(need)

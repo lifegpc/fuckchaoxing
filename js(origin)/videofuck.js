@@ -2128,7 +2128,8 @@ function fuck()
                     div2.append(completeb);
                     completeb.addEventListener('click',function(){
                         var pa = {jobid: at.jobid, knowledgeid: ad.knowledgeid, courseid: ad.courseid, clazzid: ad.clazzId, jtoken: at.jtoken}
-                        $.getJSON('https://mooc1-1.chaoxing.com/ananas/job/document', pa, (e, s) => {
+                        var ur = new URL(window.location.href);
+                        $.getJSON(ur.origin + '/ananas/job/document', pa, (e, s) => {
                             console.log(e);
                             if(e.status)
                             {
@@ -2256,7 +2257,8 @@ function fuck()
                     div2.append(completeb);
                     completeb.addEventListener('click',function(){
                         var pa = {jobid: at.jobid, knowledgeid: ad.knowledgeid, courseid: ad.courseid, clazzid: ad.clazzId, jtoken: at.jtoken}
-                        $.getJSON('https://mooc1-1.chaoxing.com/ananas/job/document', pa, (e, s) => {
+                        var ur = new URL(window.location.href);
+                        $.getJSON(ur.origin + '/ananas/job/document', pa, (e, s) => {
                             console.log(e);
                             if(e.status)
                             {
