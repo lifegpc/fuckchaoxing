@@ -1,17 +1,17 @@
 {
     "manifest_version":2,
     "name":"超星学习通辅助插件",
-    "version":"1.1.3",
+    "version":"1.1.4",
     "description":"你懂的（同时支持智慧树），源代码：https://github.com/lifegpc/fuckchaoxing",
     "author":"lifegpc",
-    "permissions":["https://*.chaoxing.com/","http://*.chaoxing.com/","http://*.5read.com/","storage","tabs","https://*.zhihuishu.com/","http://*.zhihuishu.com/","notifications"],
+    "permissions":["https://*.chaoxing.com/","http://*.chaoxing.com/","http://*.5read.com/","storage","tabs","https://*.zhihuishu.com/","http://*.zhihuishu.com/","https://*.edu.cn/","http://*.edu.cn/","notifications"],
     "background":
     {
         "scripts":["jso/jquery-3.5.1.min.js","js/settings.js","js/background.js","js/notice.js"]
     },
     "content_scripts":
     [{
-        "matches":["https://*.chaoxing.com/mycourse/studentstudy*","http://*.chaoxing.com/mycourse/studentstudy*"],
+        "matches":["https://*.chaoxing.com/mycourse/studentstudy*","http://*.chaoxing.com/mycourse/studentstudy*","https://*.edu.cn/mycourse/studentstudy*","http://*.edu.cn/mycourse/studentstudy*"],
         "js":["jso/md5.min.js","jso/jquery-3.5.1.min.js","js/settings.js","js/videofuck.js"]
     },
     {
@@ -24,12 +24,12 @@
         "js":["js/bookimg.js"]
     },
     {
-        "matches":["https://*.chaoxing.com/course/*","http://*.chaoxing.com/course/*"],
+        "matches":["https://*.chaoxing.com/course/*","http://*.chaoxing.com/course/*","https://*.edu.cn/course/*","http://*.edu.cn/course/*"],
         "js":["js/settings.js","js/coursefuck.js"],
         "css":["css/coursefuck.css"]
     },
     {
-        "matches":["https://*.chaoxing.com/work/doHomeWorkNew*","http://*.chaoxing.com/work/doHomeWorkNew*"],
+        "matches":["https://*.chaoxing.com/work/doHomeWorkNew*","http://*.chaoxing.com/work/doHomeWorkNew*","https://*.edu.cn/work/doHomeWorkNew*","http://*.edu.cn/work/doHomeWorkNew*"],
         "js":["js/settings.js","js/homeworkfuck.js"],
         "css":["css/homeworkfuck.css"]
     },

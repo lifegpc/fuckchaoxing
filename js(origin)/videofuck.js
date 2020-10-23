@@ -2517,7 +2517,7 @@ function fuck()
             }
             for(var i=0;i<vff.length;i++)
             {
-                if(vff[i].src.match(/^https:\/\/mooc1-[0-9]+.chaoxing.com\/ananas\/modules\/work\/index.html/))
+                if(vff[i].src.match(/^http(s)?:\/\/(mooc1-[0-9]+\.chaoxing\.com|[\w0-9\.]*\.edu\.cn)\/ananas\/modules\/work\/index.html/))
                 {
                     (function(vfi){fuckhomework(vfi);})(vff[i]);
                 }
