@@ -632,7 +632,7 @@ function fuck()
                             console.log(data);
                             var have=false;
                             var have2=false;
-                            if(at.isPassed==undefined)
+                            if(at.isPassed == undefined || !at.isPassed)
                             {
                                 have=true;
                                 (function(a,b,c){dcompleteb.addEventListener('click',function(){dcomplete(a,b,c)})})(data,at,rt);
@@ -970,7 +970,7 @@ function fuck()
                     {
                         console.log(data);
                         var have2=false;
-                        if(at.isPassed==undefined)
+                        if(at.isPassed == undefined || !at.isPassed)
                         {
                             (function(a,b,c){dcompleteb.addEventListener('click',function(){dcomplete(a,b,c)})})(data,at,rt);
                             div2.append(dcompleteb);
