@@ -1,7 +1,7 @@
 {
     "manifest_version":2,
     "name":"超星学习通辅助插件",
-    "version":"1.1.5",
+    "version":"1.1.6",
     "description":"你懂的（同时支持智慧树），源代码：https://github.com/lifegpc/fuckchaoxing",
     "author":"lifegpc",
     "permissions":["https://*.chaoxing.com/","http://*.chaoxing.com/","http://*.5read.com/","storage","tabs","https://*.zhihuishu.com/","http://*.zhihuishu.com/","https://*.edu.cn/","http://*.edu.cn/","notifications"],
@@ -42,6 +42,10 @@
         "matches":["https://*.ananas.chaoxing.com/video/*","http://*.ananas.chaoxing.com/video/*"],
         "js":["js/settings.js","js/videoalone.js"],
         "css":["css/videoalone.css"]
+    },
+    {
+        "matches": ["https://stuonline.zhihuishu.com/stuonline/folder/stuIndexV2*", "http://stuonline.zhihuishu.com/stuonline/folder/stuIndexV2*"],
+        "js": ["js/zhfuckembedppt.js"]
     }],
     "options_page":"options.html",
     "browser_action":
